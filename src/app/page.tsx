@@ -24,6 +24,9 @@ export default function Home() {
   const [logOpen, setLogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [history, setHistory] = useState<any[]>([]);
+
   // Estados nuevos
   const [autoRunInterval, setAutoRunInterval] = useState<number>(12 * 60 * 60 * 1000); // 12 horas por defecto
   const [nextRunIn, setNextRunIn] = useState<number>(autoRunInterval);
@@ -62,6 +65,15 @@ export default function Home() {
     setTimeout(() => {
       window.open("/reports/index.html", "_blank");
     }, 500);
+  };
+
+  const fetchHistory = async () => {
+    const res = await fetch("/api/test-history");
+    if (res.ok) {
+      const data = await res.json();
+      setHistory(data);
+    }
+    setHistoryOpen(true);
   };
 
   // Auto ejecución + contador
@@ -133,6 +145,13 @@ export default function Home() {
                 Show Report
               </Button>
             </Link>
+
+            <Button
+              onClick={fetchHistory}
+              className="rounded border px-4 py-2 bg-gray-500 text-white"
+            >
+              Show History
+            </Button>
 
             {/* Selector de intervalo automático */}
             <Select onValueChange={(v) => {
@@ -215,6 +234,39 @@ export default function Home() {
                 </div>
               );
             })}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog de historial */}
+      <Dialog open={historyOpen} onOpenChange={setHistoryOpen}>
+        <DialogContent className="sm:max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Test History</DialogTitle>
+            <DialogDescription>Summary of previous runs</DialogDescription>
+          </DialogHeader>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead>
+                <tr className="text-left border-b">
+                  <th className="p-2">Date</th>
+                  <th className="p-2">Test</th>
+                  <th className="p-2">Passed</th>
+                  <th className="p-2">Failed</th>
+                </tr>
+              </thead>
+              <tbody>
+                {history.map((h) => (
+                  <tr key={h.id} className="border-b last:border-b-0">
+                    <td className="p-2 whitespace-nowrap">{new Date(h.date).toLocaleString()}</td>
+                    <td className="p-2">{h.testPath}</td>
+                    <td className="p-2 text-green-600">{h.passed}</td>
+                    <td className="p-2 text-red-600">{h.failed}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </DialogContent>
       </Dialog>

@@ -3,6 +3,8 @@ import { spawn } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
 
+const historyFile = path.join(process.cwd(), "data", "testHistory.json");
+
 export async function POST(req: Request) {
   const body = await req.json();
   const testPath = body.testPath || "";
@@ -19,6 +21,7 @@ export async function POST(req: Request) {
   const stream = new ReadableStream({
     async start(controller) {
       const textEncoder = new TextEncoder();
+      const allLines: string[] = [];
 
       const stripAnsi = (str: string) =>
         str.replace(/\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])/g, "");
@@ -42,6 +45,7 @@ export async function POST(req: Request) {
               !cleanLine.includes("npx playwright show-report")
             ) {
               safeEnqueue(cleanLine);
+              allLines.push(cleanLine);
             }
           }
         });
@@ -55,6 +59,7 @@ export async function POST(req: Request) {
             const cleanLine = stripAnsi(line);
             if (cleanLine) {
               safeEnqueue(`Error: ${cleanLine}`);
+              allLines.push(`Error: ${cleanLine}`);
             }
           }
         });
@@ -77,6 +82,28 @@ export async function POST(req: Request) {
           await copyDir(sourceDir, targetDir);
         } catch (err) {
           console.error("Error copiando el reporte:", err);
+        }
+
+        const passed = allLines.filter((l) => l.includes("passed")).length;
+        const failed = allLines.filter((l) => l.includes("failed")).length;
+        const entry = {
+          id: Date.now(),
+          date: new Date().toISOString(),
+          testPath: testPath || "all",
+          passed,
+          failed,
+        };
+
+        try {
+          await fs.mkdir(path.dirname(historyFile), { recursive: true });
+          const existing = await fs
+            .readFile(historyFile, "utf-8")
+            .then((d) => JSON.parse(d))
+            .catch(() => []);
+          existing.unshift(entry);
+          await fs.writeFile(historyFile, JSON.stringify(existing, null, 2));
+        } catch (e) {
+          console.error("Error writing history", e);
         }
 
         controller.close();
