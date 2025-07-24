@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "id": 1753378141824,
+    "date": "2025-07-24T17:29:01.824Z",
+    "testPath": "tests/home/home-anchor.spec.ts",
+    "passed": 1,
+    "failed": 0
+  },
+  {
+    "id": 1753377850783,
+    "date": "2025-07-24T17:24:10.783Z",
+    "testPath": "all",
+    "passed": 1,
+    "failed": 1
+  },
+  {
+    "id": 1753377361887,
+    "date": "2025-07-24T17:16:01.887Z",
+    "testPath": "all",
+    "passed": 1,
+    "failed": 1
+  },
+  {
+    "id": 1753377274950,
+    "date": "2025-07-24T17:14:34.950Z",
+    "testPath": "tests/home/menu-links.spec.ts",
+    "passed": 1,
+    "failed": 0
+  },
+  {
+    "id": 1753377189676,
+    "date": "2025-07-24T17:13:09.676Z",
+    "testPath": "tests/home/home-anchor.spec.ts",
+    "passed": 1,
+    "failed": 0
+  }
+]
