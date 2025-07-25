@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import TestContent from "../components/TestContent";
+import TestHistory from "../components/TestHistory";
+import Temp from "../components/Temp";
+import ClarityKPIs from "../components/dashboard/ClarityKPIs";
+import ClarityDevicesChart from "../components/dashboard/ClarityDevicesChart";
+import ClarityTopPages from "../components/dashboard/ClarityTopPages";
 import {
   SidebarProvider,
   Sidebar,
@@ -15,10 +20,32 @@ import {
   SidebarInset,
   SidebarTrigger,
 } from "../components/ui/sidebar";
-import { FlaskConical, FileText } from "lucide-react";
+
+import { FlaskConical, FileText, History } from "lucide-react";
 
 export default function DashboardPage() {
-  const [tab, setTab] = useState<"test" | "reports">("test");
+  const [tab, setTab] = useState<"test" | "history" | "temp" | "ClarityKPIs" |  "ClarityDevicesChart" | "ClarityTopPages">(
+    "test"
+  );
+
+  const view = (() => {
+    switch (tab) {
+      case "test":
+        return <TestContent />;
+      case "history":
+        return <TestHistory />;
+      case "temp":
+        return <Temp />;
+      case "ClarityKPIs":
+        return <ClarityKPIs />;
+      case "ClarityDevicesChart":
+        return <ClarityDevicesChart />;
+      case "ClarityTopPages":
+        return <ClarityTopPages />;
+      default:
+        return null;
+    }
+  })();
 
   return (
     <SidebarProvider>
@@ -26,34 +53,63 @@ export default function DashboardPage() {
         <Sidebar className="border-r">
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-2xl text-amber-50 mb-8">
+                Dashboard PIP
+              </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={tab === "test"}
-                    >
+                    <SidebarMenuButton asChild isActive={tab === "test"}>
                       <button
                         onClick={() => setTab("test")}
                         className="flex w-full items-center gap-2"
                       >
                         <FlaskConical className="size-4" />
-                        <span>Test</span>
+                        <span>Test Section</span>
                       </button>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={tab === "reports"}
-                    >
+                    <SidebarMenuButton asChild isActive={tab === "history"}>
                       <button
-                        onClick={() => setTab("reports")}
+                        onClick={() => setTab("history")}
+                        className="flex w-full items-center gap-2"
+                      >
+                        <History className="size-4" />
+                        <span>Test History</span>
+                      </button>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={tab === "ClarityKPIs"}>
+                      <button
+                        onClick={() => setTab("ClarityKPIs")}
                         className="flex w-full items-center gap-2"
                       >
                         <FileText className="size-4" />
-                        <span>Reports</span>
+                        <span>Clarity KPIs</span>
+                      </button>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={tab === "ClarityDevicesChart"}>
+                      <button
+                        onClick={() => setTab("ClarityDevicesChart")}
+                        className="flex w-full items-center gap-2"
+                      >
+                        <FileText className="size-4" />
+                        <span>Clarity Charts</span>
+                      </button>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={tab === "ClarityTopPages"}>
+                      <button
+                        onClick={() => setTab("ClarityTopPages")}
+                        className="flex w-full items-center gap-2"
+                      >
+                        <FileText className="size-4" />
+                        <span>Clarity Top Pages</span>
                       </button>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -61,14 +117,15 @@ export default function DashboardPage() {
               </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>
+          <p className="text-center text-sm text-gray-500 mb-2">By dev-team</p>
         </Sidebar>
-        <SidebarInset className="flex-1 p-4">
-          <SidebarTrigger className="mb-4 md:hidden" />
-          {tab === "test" ? (
-            <TestContent />
-          ) : (
-            <iframe src="/reports/index.html" className="w-full h-[80vh]" />
-          )}
+
+        <SidebarInset className="flex-1 flex flex-col w-full min-h-screen p-0 m-0">
+          <SidebarTrigger className="cursor-pointer mb-4" />
+          
+          <div className="flex-1 w-full h-full overflow-auto p-6">
+            {view}
+          </div>
         </SidebarInset>
       </div>
     </SidebarProvider>

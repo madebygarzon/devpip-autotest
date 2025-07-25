@@ -1,0 +1,39 @@
+[
+  {
+    "date": "2025-07-25",
+    "totals": {
+      "sessions": 3,
+      "engagementTimeAvg": 103,
+      "rageClicks": 3,
+      "deadClicks": 3
+    },
+    "byDevice": {
+      "Mobile": 1,
+      "PC": 2,
+      "Other": 0
+    },
+    "byCountry": {},
+    "topPages": [
+      {
+        "url": "(unknown)",
+        "sessions": 2
+      },
+      {
+        "url": "(unknown)",
+        "sessions": 1
+      },
+      {
+        "url": "(unknown)",
+        "sessions": 1
+      },
+      {
+        "url": "(unknown)",
+        "sessions": 1
+      },
+      {
+        "url": "(unknown)",
+        "sessions": 3
+      }
+    ]
+  }
+]
