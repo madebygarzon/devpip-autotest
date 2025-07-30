@@ -11,6 +11,12 @@ import {
 } from "../../components/ui/select";
 import { Button } from "../../components/ui/button";
 import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -20,6 +26,29 @@ import {
 
 export default function TestContent() {
   const [selectedTest, setSelectedTest] = useState("");
+  const [selectedSite, setSelectedSite] = useState("pip");
+  const sites = [
+    {
+      project: "pip",
+      name: "Partner in Publishing",
+      url: "https://partnerinpublishing.com",
+    },
+    {
+      project: "gradepotential",
+      name: "Grade Potential",
+      url: "https://gradepotentialtutoring.ue1.rapydapps.cloud",
+    },
+    {
+      project: "itopia",
+      name: "Itopia",
+      url: "https://itopia.com",
+    },
+    {
+      project: "metricmarine",
+      name: "Metric Marine",
+      url: "https://www.metricmarine.com",
+    },
+  ];
   const [logLines, setLogLines] = useState<string[]>([]);
   const [logOpen, setLogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +67,10 @@ export default function TestContent() {
     const res = await fetch("/api/run-test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ testPath: testToRun === "all" ? "" : testToRun }),
+      body: JSON.stringify({
+        testPath: testToRun === "all" ? "" : testToRun,
+        project: selectedSite,
+      }),
     });
 
     if (!res.body) {
@@ -106,6 +138,26 @@ export default function TestContent() {
         <h2 className="text-2xl font-semibold text-white drop-shadow-[0_0_8px_#00ffff80]">
           ⚡ Automated Test Runner
         </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+          {sites.map((site) => (
+            <Card
+              key={site.project}
+              onClick={() => setSelectedSite(site.project)}
+              className={`cursor-pointer hover:bg-gray-800/40 ${
+                selectedSite === site.project ? "border-blue-500 bg-gray-800/40" : "border-gray-700"
+              }`}
+            >
+              <CardHeader>
+                <CardTitle className="text-sm text-white">{site.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-xs text-gray-400 break-all">{site.url}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
         <div className="flex flex-wrap gap-4">
 
           {/* SELECT DE TEST */}
