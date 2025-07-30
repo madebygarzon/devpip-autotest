@@ -12,26 +12,52 @@
       "PC": 2,
       "Other": 0
     },
+    "byOS": {
+      "Linux": 4,
+      "Windows": 3,
+      "iOS": 2,
+      "Android": 1,
+      "MacOS": 1
+    },
+    "byBrowser": {
+      "Chrome": 6,
+      "MobileSafari": 1,
+      "InstagramApp": 1,
+      "ChromeMobile": 1,
+      "Edge": 1,
+      "Firefox": 1
+    },
+    "byChannel": {
+      "Direct": 7,
+      "Other": 6,
+      "OrganicSearch": 4,
+      "Referral": 1
+    },
+    "byReferrer": {
+      "partnerinpublishing.com": 7,
+      "www.google.com": 4,
+      "linktr.ee": 1
+    },
     "byCountry": {},
     "topPages": [
       {
-        "url": "(unknown)",
+        "url": "(https://partnerinpublishing.com/)",
         "sessions": 2
       },
       {
-        "url": "(unknown)",
+        "url": "(https://partnerinpublishing.com/about/)",
         "sessions": 1
       },
       {
-        "url": "(unknown)",
+        "url": "(https://partnerinpublishing.com/blogs/)",
         "sessions": 1
       },
       {
-        "url": "(unknown)",
+        "url": "(https://partnerinpublishing.com/partners/)",
         "sessions": 1
       },
       {
-        "url": "(unknown)",
+        "url": "(https://partnerinpublishing.com/talent-search-group/client-openings/)",
         "sessions": 3
       }
     ]
