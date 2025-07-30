@@ -139,7 +139,16 @@ export default function TestContent() {
               <SelectItem value="86400000">🕒 Every 24 hours</SelectItem>
             </SelectContent>
           </Select>
-
+          <Link  href="/api/download-report" target="_blank">
+           <Button
+           
+            
+            className="bg-blue-600 hover:bg-blue-700 text-white shadow-[0_0_10px_#00ffff40] transition-transform hover:scale-105"
+          >
+            📥 download PDF of the report
+          </Button>
+          </Link>
+          
           {/* BOTÓN DE EJECUCIÓN */}
           <Button 
             onClick={() => runTest()} 
