@@ -8,10 +8,11 @@ const historyFile = path.join(process.cwd(), "data", "testHistory.json");
 export async function POST(req: Request) {
   const body = await req.json();
   const testPath = body.testPath || "";
+  const project = body.project || "";
 
-  const args = testPath
-  ? ["playwright", "test", testPath]
-  : ["playwright", "test"];
+  const args = ["playwright", "test"];
+  if (testPath) args.push(testPath);
+  if (project) args.push("--project", project);
 
   const child = spawn("npx", args, {
     cwd: process.cwd(),
