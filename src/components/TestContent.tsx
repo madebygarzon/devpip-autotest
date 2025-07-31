@@ -9,21 +9,16 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/select";
-import { Button } from "../../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "../../components/ui/dialog";
+} from "@/components/ui/dialog";
 import Loader from "../components/Loader";
 
 interface Site {
@@ -78,7 +73,6 @@ function SiteTestCard({ site }: { site: Site }) {
   const [logOpen, setLogOpen] = useState(false);
   const [logLines, setLogLines] = useState<string[]>([]);
 
-  // 🕒 Auto run
   useEffect(() => {
     if (!autoRunInterval) return;
 
@@ -109,7 +103,6 @@ function SiteTestCard({ site }: { site: Site }) {
     return `${hours}:${minutes}:${seconds}`;
   };
 
-  // ✅ Lógica de ejecución de test
   const runTest = async (testToRun = selectedTest) => {
     if (!testToRun) {
       Swal.fire({
@@ -158,10 +151,8 @@ function SiteTestCard({ site }: { site: Site }) {
         setLogLines((prev) => [...prev, ...lines]);
       }
 
-      // ✅ Solo abrimos el modal de logs (SDialog)
       setLogOpen(true);
 
-      // ✅ Abrimos el reporte en otra pestaña
       setTimeout(() => {
         window.open("/reports/index.html", "_blank");
       }, 500);
@@ -177,6 +168,75 @@ function SiteTestCard({ site }: { site: Site }) {
     }
   };
 
+  const TESTS_BY_SITE: Record<string, { label: string; path: string }[]> = {
+    pip: [
+      {
+        label: "📄 Run Form Home pip Test",
+        path: "tests/pip/home/form.spec.ts",
+      },
+      {
+        label: "📄 Run Home Anchor Test",
+        path: "tests/pip/home/home-anchor.spec.ts",
+      },
+      {
+        label: "🔗 Run Home Cards Navigation Test",
+        path: "tests/pip/home/home-cards-navigation.spec.ts",
+      },
+      {
+        label: "🔗 Run Menu Links Test",
+        path: "tests/pip/home/menu-links.spec.ts",
+      },
+    ],
+    gradepotential: [
+      { label: "📄 Run Form Home gp Test", path: "tests/gp/home/form.spec.ts" },
+      {
+        label: "📄 Run Home Anchor Test",
+        path: "tests/gp/home/home-anchor.spec.ts",
+      },
+      {
+        label: "🔗 Run Home Cards Navigation Test",
+        path: "tests/gp/home/home-cards-navigation.spec.ts",
+      },
+      {
+        label: "🔗 Run Menu Links Test",
+        path: "tests/gp/home/menu-links.spec.ts",
+      },
+    ],
+    itopia: [
+      {
+        label: "📄 Run Form Home itopia Test",
+        path: "tests/itopia/home/form.spec.ts",
+      },
+      {
+        label: "📄 Run Home Anchor Test",
+        path: "tests/itopia/home/home-anchor.spec.ts",
+      },
+      {
+        label: "🔗 Run Home Cards Navigation Test",
+        path: "tests/itopia/home/home-cards-navigation.spec.ts",
+      },
+      {
+        label: "🔗 Run Menu Links Test",
+        path: "tests/itopia/home/menu-links.spec.ts",
+      },
+    ],
+    metricmarine: [
+      { label: "📄 Run Form Home MM Test", path: "tests/mm/home/form.spec.ts" },
+      {
+        label: "📄 Run Home Anchor Test",
+        path: "tests/mm/home/home-anchor.spec.ts",
+      },
+      {
+        label: "🔗 Run Home Cards Navigation Test",
+        path: "tests/mm/home/home-cards-navigation.spec.ts",
+      },
+      {
+        label: "🔗 Run Menu Links Test",
+        path: "tests/mm/home/menu-links.spec.ts",
+      },
+    ],
+  };
+
   return (
     <Card className="bg-gray-900 border border-gray-700 rounded-2xl shadow-[0_0_15px_#00ffff20] p-4">
       <CardHeader>
@@ -185,30 +245,20 @@ function SiteTestCard({ site }: { site: Site }) {
       <CardContent className="flex flex-col gap-3">
         <p className="text-xs text-gray-400">{site.url}</p>
 
-        {/* SELECT DE TEST */}
         <Select value={selectedTest} onValueChange={setSelectedTest}>
           <SelectTrigger className="w-full bg-gray-800 text-gray-200 border border-gray-700 rounded-lg">
             <SelectValue placeholder="Select a test to run" />
           </SelectTrigger>
           <SelectContent className="bg-gray-800 text-gray-200 border border-gray-700">
             <SelectItem value="all">🔁 Run all tests</SelectItem>
-            <SelectItem value="tests/home">🏠 Run all Home tests</SelectItem>
-            <SelectItem value="tests/home/form.spec.ts">
-              📄 Run Form Home Test
-            </SelectItem>
-            <SelectItem value="tests/home/home-anchor.spec.ts">
-              📄 Run Home Anchor Test
-            </SelectItem>
-            <SelectItem value="tests/home/home-cards-navigation.spec.ts">
-              🔗 Run Home Cards Navigation Test
-            </SelectItem>
-            <SelectItem value="tests/home/menu-links.spec.ts">
-              🔗 Run Menu Links Test
-            </SelectItem>
+            {TESTS_BY_SITE[site.project]?.map((test) => (
+              <SelectItem key={test.path} value={test.path}>
+                {test.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 
-        {/* SELECT DE AUTO RUN */}
         <Select
           onValueChange={(v) => {
             const ms = Number(v);
@@ -237,13 +287,13 @@ function SiteTestCard({ site }: { site: Site }) {
             {isLoading ? <Loader size={30} /> : "Run Test"}
           </Button>
 
-          <Link href="/api/download-report" target="_blank">
+          <Link href={`/api/download-report?project=${site.project}`} target="_blank">
             <Button className="bg-blue-600 hover:bg-blue-700 text-white">
               📥 PDF
             </Button>
           </Link>
 
-          <Link href="/reports/index.html" target="_blank">
+          <Link href={`/reports/${site.project}/index.html`} target="_blank">
             <Button className="bg-green-600 hover:bg-green-700 text-white">
               Show Report
             </Button>

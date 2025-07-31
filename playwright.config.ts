@@ -3,10 +3,17 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
+
+  outputDir: 'test-results',  
+
   use: {
     headless: true,
     ignoreHTTPSErrors: true,
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+    trace: 'retain-on-failure', 
   },
+
   projects: [
     {
       name: 'pip',
