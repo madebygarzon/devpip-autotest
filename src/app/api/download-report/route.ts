@@ -10,54 +10,18 @@ export async function GET() {
     const reportPath = path.join(process.cwd(), "public", "reports", "index.html");
 
     await page.goto(`file://${reportPath}`, { waitUntil: "networkidle" });
-
     await page.waitForTimeout(1000);
 
     await page.evaluate(() => {
-      document.querySelectorAll(".chip").forEach((chip) => {
-        const header = chip.querySelector(".chip-header");
-        if (header) {
-          header.setAttribute("aria-expanded", "true");
-        }
-
-        const controlsId = header?.getAttribute("aria-controls");
-        if (controlsId) {
-          const controlled = document.getElementById(controlsId);
-          if (controlled) {
-            controlled.style.display = "block";
-            controlled.style.maxHeight = "none";
-            controlled.style.opacity = "1";
-            controlled.style.visibility = "visible";
-          }
-        }
+      
+      document.querySelectorAll('[aria-expanded="false"]').forEach((el) => {
+        el.setAttribute("aria-expanded", "true");
       });
 
+  
       const style = document.createElement("style");
       style.innerHTML = `
-        .chip * {
-          display: block !important;
-          max-height: none !important;
-          visibility: visible !important;
-          opacity: 1 !important;
-        }
-      `;
-      document.head.appendChild(style);
-    });
-
-    await page.evaluate(() => {
-      document.querySelectorAll('[role="treeitem"]').forEach((el) => {
-        const clickable = el.querySelector(".tree-item-title");
-        if (clickable) {
-          clickable.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        }
-      });
-
-      const style = document.createElement("style");
-      style.innerHTML = `
-        [role="treeitem"] .test-error-container,
-        [role="treeitem"] .test-error-view,
-        [role="treeitem"] pre,
-        [role="treeitem"] code {
+        .chip *, .test-file-test, .test-file-details-row, pre, code {
           display: block !important;
           max-height: none !important;
           opacity: 1 !important;
