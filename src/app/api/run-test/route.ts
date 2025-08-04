@@ -5,10 +5,17 @@ import path from "path";
 
 const historyFile = path.join(process.cwd(), "data", "testHistory.json");
 
+const PROJECT_FAVICONS: Record<string, string> = {
+  pip: "https://partnerinpublishing.com/wp-content/uploads/2024/05/cropped-Group-3.png",
+  gradepotential: "https://gradepotentialtutoring.ue1.rapydapps.cloud/favicon.ico",
+  itopia: "https://itopia.com/favicon.ico",
+  metricmarine: "https://www.metricmarine.com/favicon.ico",
+};
+
 export async function POST(req: Request) {
   const body = await req.json();
   const testPath = body.testPath || "";
-  const project = body.project || "default"; // fallback
+  const project = body.project || "default";
 
   const args = ["playwright", "test"];
   if (testPath) args.push(testPath);
@@ -24,30 +31,25 @@ export async function POST(req: Request) {
       const textEncoder = new TextEncoder();
       const allLines: string[] = [];
 
-      const stripAnsi = (str: string) =>
-        str.replace(/\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])/g, "");
-
       const safeEnqueue = (text: string) => {
         try {
           controller.enqueue(textEncoder.encode(text + "\n"));
         } catch (e) {
-          console.warn("Stream warning:", e);
+          console.warn("⚠️ Stream warning:", e);
         }
       };
 
-      // 🟢 capturamos logs del test
+      const stripAnsi = (str: string) =>
+        str.replace(/\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])/g, "");
+
       const stdoutDone = new Promise<void>((resolve) => {
         child.stdout.on("data", (data) => {
           const lines = data.toString().split("\n");
           for (const line of lines) {
-            const cleanLine = stripAnsi(line);
-            if (
-              cleanLine &&
-              !cleanLine.includes("To open last HTML report run:") &&
-              !cleanLine.includes("npx playwright show-report")
-            ) {
-              safeEnqueue(cleanLine);
-              allLines.push(cleanLine);
+            const clean = stripAnsi(line);
+            if (clean) {
+              safeEnqueue(clean);
+              allLines.push(clean);
             }
           }
         });
@@ -58,28 +60,23 @@ export async function POST(req: Request) {
         child.stderr.on("data", (data) => {
           const lines = data.toString().split("\n");
           for (const line of lines) {
-            const cleanLine = stripAnsi(line);
-            if (cleanLine) {
-              safeEnqueue(`Error: ${cleanLine}`);
-              allLines.push(`Error: ${cleanLine}`);
+            const clean = stripAnsi(line);
+            if (clean) {
+              safeEnqueue(`Error: ${clean}`);
+              allLines.push(`Error: ${clean}`);
             }
           }
         });
         child.stderr.on("end", resolve);
       });
 
-      child.on("error", (err) => {
-        safeEnqueue(`Error: ${err.message}`);
-      });
-
-      // 🟢 cuando termina
       child.on("close", async () => {
         await Promise.all([stdoutDone, stderrDone]);
 
         const sourceDir = path.join(process.cwd(), "playwright-report");
         const projectDir = path.join(process.cwd(), "public", "reports", project);
 
-        // 🔄 Copiar HTML de reporte
+        // ✅ 1. Copiar reporte HTML generado
         try {
           await fs.rm(projectDir, { recursive: true, force: true });
           await fs.mkdir(projectDir, { recursive: true });
@@ -88,7 +85,31 @@ export async function POST(req: Request) {
           console.error("❌ Error copiando reporte:", err);
         }
 
-        // 📂 Copiar screenshots/videos
+        // ✅ 2. Modificar título y favicon de index.html
+        const indexFile = path.join(projectDir, "index.html");
+        try {
+          let html = await fs.readFile(indexFile, "utf8");
+
+          // 🎯 Cambiar título
+          html = html.replace(/<title>.*<\/title>/, `<title>${project.toUpperCase()} Test Report</title>`);
+
+          // 🎯 Cambiar favicon (o agregarlo si no existe)
+          const faviconUrl = PROJECT_FAVICONS[project] || "/default-favicon.ico";
+          const faviconTag = `<link rel="icon" href="${faviconUrl}?v=${Date.now()}">`;
+
+          if (html.includes('<link rel="icon"')) {
+            html = html.replace(/<link rel="icon".*?>/, faviconTag);
+          } else {
+            html = html.replace("</head>", `${faviconTag}\n</head>`);
+          }
+
+          await fs.writeFile(indexFile, html, "utf8");
+          console.log(`✅ Título y favicon editados en ${indexFile}`);
+        } catch (err) {
+          console.error("❌ Error modificando título/favicon:", err);
+        }
+
+        // ✅ 3. Copiar screenshots y videos
         const testResultsDir = path.join(process.cwd(), "test-results");
         const assetsDir = path.join(projectDir, "assets");
 
@@ -97,18 +118,14 @@ export async function POST(req: Request) {
 
         try {
           await fs.mkdir(assetsDir, { recursive: true });
-
-          // 🔥 LLAMAMOS A LA FUNCIÓN AQUÍ
           await collectAndCopyMedia(testResultsDir, assetsDir, screenshots, videos, project);
-
-          console.log(`✅ ${screenshots.length} screenshots y ${videos.length} videos copiados para ${project}`);
         } catch (err) {
-          console.error("❌ Error copiando screenshots/videos:", err);
+          console.error("❌ Error copiando media:", err);
         }
 
-        // 📊 Guardar historial
-        const passed = allLines.filter((l) => l.includes("passed")).length;
-        const failed = allLines.filter((l) => l.includes("failed")).length;
+        // ✅ 4. Guardar en el historial
+        const passed = allLines.filter((l) => /\b\d+\spassed\b/.test(l)).length;
+        const failed = allLines.filter((l) => /\b\d+\sfailed\b/.test(l)).length;
 
         const entry = {
           id: Date.now(),
@@ -123,14 +140,11 @@ export async function POST(req: Request) {
 
         try {
           await fs.mkdir(path.dirname(historyFile), { recursive: true });
-          const existing = await fs
-            .readFile(historyFile, "utf-8")
-            .then((d) => JSON.parse(d))
-            .catch(() => []);
+          const existing = await fs.readFile(historyFile, "utf-8").then((d) => JSON.parse(d)).catch(() => []);
           existing.unshift(entry);
           await fs.writeFile(historyFile, JSON.stringify(existing, null, 2));
         } catch (e) {
-          console.error("Error writing history", e);
+          console.error("❌ Error escribiendo historial:", e);
         }
 
         controller.close();
@@ -143,7 +157,7 @@ export async function POST(req: Request) {
   });
 }
 
-// 🔄 función recursiva para copiar archivos
+// 🔁 Copiar archivos (incluyendo media)
 async function collectAndCopyMedia(srcDir: string, destDir: string, screenshots: string[], videos: string[], project: string) {
   const entries = await fs.readdir(srcDir, { withFileTypes: true });
 
@@ -157,11 +171,9 @@ async function collectAndCopyMedia(srcDir: string, destDir: string, screenshots:
     } else {
       if (entry.name.endsWith(".png")) {
         await fs.copyFile(srcPath, destPath);
-        // 🔥 Guardamos la ruta relativa completa
         const relativePath = path.relative(path.join(process.cwd(), "public"), destPath);
         screenshots.push(`/${relativePath.replace(/\\/g, "/")}`);
       }
-
       if (entry.name.endsWith(".webm")) {
         await fs.copyFile(srcPath, destPath);
         const relativePath = path.relative(path.join(process.cwd(), "public"), destPath);
@@ -171,6 +183,7 @@ async function collectAndCopyMedia(srcDir: string, destDir: string, screenshots:
   }
 }
 
+// 🔁 Copiar directorio entero (reporte principal)
 async function copyDir(src: string, dest: string) {
   const entries = await fs.readdir(src, { withFileTypes: true });
 
