@@ -21,7 +21,15 @@ import {
   SidebarTrigger,
 } from "../components/ui/sidebar";
 
-import { FlaskConical, FileText, History } from "lucide-react";
+import { FlaskConical, FileText, History, MessageCircle } from "lucide-react";
+import DeepseekChat from "../components/DeepseekChat";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
 
 export default function DashboardPage() {
   const [tab, setTab] = useState<"test" | "history" | "temp" | "ClarityKPIs" |  "ClarityDevicesChart" | "ClarityTopPages">(
@@ -128,6 +136,19 @@ export default function DashboardPage() {
           </div>
         </SidebarInset>
       </div>
+      <Dialog>
+        <DialogTrigger asChild>
+          <button className="fixed bottom-4 right-4 rounded-full bg-blue-500 text-white p-3 shadow-lg">
+            <MessageCircle className="w-5 h-5" />
+          </button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Deepseek Chat</DialogTitle>
+          </DialogHeader>
+          <DeepseekChat />
+        </DialogContent>
+      </Dialog>
     </SidebarProvider>
   );
 }
