@@ -8,35 +8,35 @@ test.describe('Service cards redirect correctly', () => {
   const cards = [
     {
       id: '#brxe-sqxgai',
-      url: 'https://partnerinpublishing.com/services/brand-awareness/',
+      url: 'https://st.partnerinpublishing.com/services/brand-awareness/',
     },
     {
       id: '#brxe-pocmop',
-      url: 'https://partnerinpublishing.com/services/business-strategy-development/',
+      url: 'https://st.partnerinpublishing.com/services/business-strategy-development/',
     },
     {
       id: '#brxe-dlvkgz',
-      url: 'https://partnerinpublishing.com/services/digital-marketing/',
+      url: 'https://st.partnerinpublishing.com/services/digital-marketing/',
     },
     {
       id: '#brxe-cjvtps',
-      url: 'https://partnerinpublishing.com/services/innovation-marketplace/',
+      url: 'https://st.partnerinpublishing.com/services/innovation-marketplace/',
     },
     {
       id: '#brxe-cmktmc',
-      url: 'https://partnerinpublishing.com/services/market-research/',
+      url: 'https://st.partnerinpublishing.com/services/market-research/',
     },
     {
       id: '#brxe-dfhnam',
-      url: 'https://partnerinpublishing.com/talent-search-group/',
+      url: 'https://st.partnerinpublishing.com/talent-search-group/',
     },
     {
       id: '#brxe-ujzrxh',
-      url: 'https://partnerinpublishing.com/services/video-production-services/',
+      url: 'https://st.partnerinpublishing.com/services/video-production-services/',
     },
     {
       id: '#brxe-mgehjn',
-      url: 'https://partnerinpublishing.com/services/web-development-services/',
+      url: 'https://st.partnerinpublishing.com/services/web-development-services/',
     },
   ];
 

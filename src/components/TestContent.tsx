@@ -31,8 +31,8 @@ export default function TestContent() {
   const sites: Site[] = [
     {
       project: "pip",
-      name: "Partner in Publishing",
-      url: "https://partnerinpublishing.com",
+      name: "Partner in Publishing (Staging)",
+      url: "https://st.partnerinpublishing.com",
     },
     {
       project: "gradepotential",
@@ -173,6 +173,10 @@ function SiteTestCard({ site }: { site: Site }) {
       {
         label: "📄 Run Form Home pip Test",
         path: "tests/pip/home/form.spec.ts",
+      },
+      {
+        label: "📄 Run Menu Home Footer pip Test",
+        path: "tests/pip/home/menu-links-footer.spec.ts",
       },
       {
         label: "📄 Run Home Anchor Test",
