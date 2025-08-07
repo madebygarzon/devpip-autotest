@@ -4,7 +4,7 @@ import path from 'path';
 import Fuse from 'fuse.js';
 
 const ASSISTANT_PREFIX =
-  'Soy un asistente virtual diseñado para apoyar en el análisis de los resultados de los tests.';
+  'I am a virtual assistant designed to support the analysis of test results In Dashboard PIP Panel.';
 
 export async function POST(req: Request) {
   const { prompt } = await req.json();
@@ -26,9 +26,9 @@ export async function POST(req: Request) {
     if (results.length > 0) {
       const formatted = results.slice(0, 3).map((r) => {
         const item = r.item as any;
-        return `${item.project} - ${item.testPath}: ${item.passed} pasados, ${item.failed} fallados el ${new Date(item.date).toLocaleString()}`;
+        return `${item.project} - ${item.testPath}: ${item.passed} passed, ${item.failed} failed on ${new Date(item.date).toLocaleString()}`;
       });
-      responseText = `${ASSISTANT_PREFIX} Según el historial de pruebas, los resultados más relacionados son:\n${formatted.join('\n')}`;
+      responseText = `${ASSISTANT_PREFIX} According to the test history, the most relevant results are:\n${formatted.join('\n')}`;
     }
   } catch {
     // If reading or parsing fails, fallback to DeepSeek
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
           choices: [
             {
               message: {
-                content: `${ASSISTANT_PREFIX} No se ha configurado la clave DEEPSEEK_API_KEY.`,
+                content: `${ASSISTANT_PREFIX} The DEEPSEEK_API_KEY is not configured.`,
               },
             },
           ],
