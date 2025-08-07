@@ -1,8 +1,8 @@
 // app/api/run-test/route.ts
-import { errors } from "@playwright/test";
 import { spawn } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
+import * as cheerio from "cheerio";
 
 const historyFile = path.join(process.cwd(), "data", "testHistory.json");
 
@@ -154,7 +154,14 @@ export async function POST(req: Request) {
   });
 }
 
-async function collectAndCopyMedia(srcDir: string, destDir: string, screenshots: string[], videos: string[], errors: string[] ,project: string) {
+async function collectAndCopyMedia(
+  srcDir: string,
+  destDir: string,
+  screenshots: string[],
+  videos: string[],
+  errors: string[],
+  project: string,
+) {
   const entries = await fs.readdir(srcDir, { withFileTypes: true });
 
   for (const entry of entries) {
@@ -178,8 +185,31 @@ async function collectAndCopyMedia(srcDir: string, destDir: string, screenshots:
       if (entry.name.endsWith(".txt") || entry.name.endsWith(".log")) {
         const content = await fs.readFile(srcPath, "utf8");
         const lines = content.split("\n").map((line) => line.trim()).filter(Boolean);
-        errors.push(...lines.slice(0, 10)); 
+        errors.push(...lines.slice(0, 10));
       }
+    }
+  }
+
+  if (srcDir === path.join(process.cwd(), "test-results")) {
+    const indexPath = path.join(process.cwd(), "public", "reports", project, "index.html");
+    try {
+      const html = await fs.readFile(indexPath, "utf8");
+      const $ = cheerio.load(html);
+      $(".test-error-view").each((_, el) => {
+        const text =
+          $(el)
+            .find("span")
+            .map((_, span) => $(span).text())
+            .get()
+            .join("\n");
+        const lines = text
+          .split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean);
+        errors.push(...lines.slice(0, 10));
+      });
+    } catch (err) {
+      console.error("❌ Error extrayendo errores del HTML:", err);
     }
   }
 }
