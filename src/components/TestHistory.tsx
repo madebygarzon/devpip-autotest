@@ -12,10 +12,13 @@ import {
 
 interface TestRun {
   id: string;
-  date: string; // o Date si tu API ya devuelve un ISO‑string
+  date: string;
   testPath: string;
   passed: number;
   failed: number;
+  screenshots?: string[];
+  videos?: string[];
+  errors?: string[];
 }
 
 export default function TestHistory() {
@@ -66,6 +69,7 @@ export default function TestHistory() {
                   <TableHead className="p-3 text-red-700">Failed</TableHead>
                   <TableHead className="p-3">Screenshots</TableHead>
                   <TableHead className="p-3">Videos</TableHead>
+                  <TableHead className="p-3">Errors</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -117,6 +121,17 @@ export default function TestHistory() {
                             🎥 Video {idx + 1}
                           </a>
                         ))
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="p-3">
+                      {h.errors?.length > 0 ? (
+                        <ul className="list-disc list-inside text-red-500 text-sm">
+                          {h.errors.map((e: string, idx: number) => (
+                            <li key={idx}>{e}</li>
+                          ))}
+                        </ul>
                       ) : (
                         <span className="text-gray-400">-</span>
                       )}

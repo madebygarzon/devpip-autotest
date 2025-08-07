@@ -33,13 +33,13 @@
           - img
       - listitem:
         - text: gp
-        - link "(888) 740-1023":
+        - link "(888) 978-3739":
           - /url: tel:+18885200511
 - main:
   - heading "Watch Your Student Thrive with In-home, Personalized Tutoring" [level=3]
   - paragraph: For over 20 years, our nationwide network has connected families with top tutors in their neighborhood, delivering tailored, student-centered support for every grade and subject—from kindergarden to college.
   - text: Get a Quote
-  - link "Call (888) 740-1023":
+  - link "Call (888) 978-3739":
     - /url: tel:+18885200511
   - heading "Where Traditional Tutoring Misses the Mark" [level=3]
   - region:
@@ -171,7 +171,7 @@
     - button "Previous slide": 
     - button "Go to first slide": 
   - text: Get a Quote
-  - link "Call (888) 740-1023":
+  - link "Call (888) 978-3739":
     - /url: tel:+18885200511
   - iframe
   - text: Personal Connections, Proven Results At Grade Potential, we believe one-on-one connections make all the difference. Our tutors nurture confidence, spark curiosity, and help your child make measurable improvements in just weeks. Local Tutors Who Come to You
@@ -212,24 +212,24 @@
   - paragraph: Meet Your Tutor
   - paragraph: We’ll find the perfect tutor for the student, making sure they’re paired with the right expert from day one, setting them up for success from the start.
   - text: Get a Quote
-  - link "Call (888) 740-1023":
+  - link "Call (888) 978-3739":
     - /url: tel:+18885200511
   - heading "Strategies and Insights for Better Learning" [level=3]
   - text: "July 30, 2025 Unlock Your Child’s Potential: Understanding Learning Styles with the VARK Model"
   - link "READ MORE":
     - /url: https://gradepotentialtutoring.ue1.rapydapps.cloud/blog/unlock-your-childs-potential-understanding-learning-styles-with-the-vark-model/
-  - text: July 30, 2025 Why In-Person Tutoring Still Matters—Especially for K-8 Learners
-  - link "READ MORE":
-    - /url: https://gradepotentialtutoring.ue1.rapydapps.cloud/blog/why-in-person-tutoring-still-matters-especially-for-k-8-learners-2/
   - text: "July 30, 2025 The Power of Words: Supporting Your Child’s Learning Through Read/Write Learning"
   - link "READ MORE":
     - /url: https://gradepotentialtutoring.ue1.rapydapps.cloud/blog/the-power-of-words-supporting-your-childs-learning-through-read-write-learning/
-  - link "Call (888) 740-1023":
+  - text: July 30, 2025 How In-Person Tutoring Can Support Your Child—Without Putting It All on You
+  - link "READ MORE":
+    - /url: https://gradepotentialtutoring.ue1.rapydapps.cloud/blog/how-in-person-tutoring-can-support-your-child-without-putting-it-all-on-you/
+  - link "Call (888) 978-3739":
     - /url: tel:+18885200511
   - link "Explore Our Blog":
     - /url: https://gradepotentialtutoring.ue1.rapydapps.cloud/blog/
   - text: Take the First Step Kickstart your child's success story. Call us now and see improvements within weeks. Get a Quote
-  - link "Call (888) 740-1023":
+  - link "Call (888) 978-3739":
     - /url: tel:+18885200511
 - contentinfo:
   - text: Watch Your Student Thrive with In-home, Personalized Tutoring Navigation
@@ -243,7 +243,7 @@
     - text: Get a Quote
   - text: Contact
   - img
-  - link "(888) 740-1023":
+  - link "(888) 978-3739":
     - /url: tel:+18885200511
   - img
   - img

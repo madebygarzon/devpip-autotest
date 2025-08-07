@@ -5,10 +5,10 @@ import { execSync } from "child_process";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const project = body.project || "pip"; 
+    const project = body.project || "PIP Test Report"; 
 
     const cwd = process.cwd();
-    const generatedReportPath = path.join(cwd, "playwright-report");
+    const generatedReportPath = path.join(cwd, "");
     const projectReportPath = path.join(cwd, "public", "reports", project);
 
     execSync(`npx playwright test --project=${project} --reporter=html`, {

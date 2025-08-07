@@ -1,4 +1,5 @@
 // app/api/run-test/route.ts
+import { errors } from "@playwright/test";
 import { spawn } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
@@ -15,7 +16,7 @@ const PROJECT_FAVICONS: Record<string, string> = {
 export async function POST(req: Request) {
   const body = await req.json();
   const testPath = body.testPath || "";
-  const project = body.project || "default";
+  const project = body.project || "PIP Test Report";
 
   const args = ["playwright", "test"];
   if (testPath) args.push(testPath);
@@ -76,7 +77,6 @@ export async function POST(req: Request) {
         const sourceDir = path.join(process.cwd(), "playwright-report");
         const projectDir = path.join(process.cwd(), "public", "reports", project);
 
-        // ✅ 1. Copiar reporte HTML generado
         try {
           await fs.rm(projectDir, { recursive: true, force: true });
           await fs.mkdir(projectDir, { recursive: true });
@@ -85,15 +85,12 @@ export async function POST(req: Request) {
           console.error("❌ Error copiando reporte:", err);
         }
 
-        // ✅ 2. Modificar título y favicon de index.html
         const indexFile = path.join(projectDir, "index.html");
         try {
           let html = await fs.readFile(indexFile, "utf8");
 
-          // 🎯 Cambiar título
           html = html.replace(/<title>.*<\/title>/, `<title>${project.toUpperCase()} Test Report</title>`);
 
-          // 🎯 Cambiar favicon (o agregarlo si no existe)
           const faviconUrl = PROJECT_FAVICONS[project] || "/default-favicon.ico";
           const faviconTag = `<link rel="icon" href="${faviconUrl}?v=${Date.now()}">`;
 
@@ -109,21 +106,20 @@ export async function POST(req: Request) {
           console.error("❌ Error modificando título/favicon:", err);
         }
 
-        // ✅ 3. Copiar screenshots y videos
         const testResultsDir = path.join(process.cwd(), "test-results");
         const assetsDir = path.join(projectDir, "assets");
 
         const screenshots: string[] = [];
         const videos: string[] = [];
+        const errors: string[] = [];
 
         try {
           await fs.mkdir(assetsDir, { recursive: true });
-          await collectAndCopyMedia(testResultsDir, assetsDir, screenshots, videos, project);
+          await collectAndCopyMedia(testResultsDir, assetsDir, screenshots, videos, errors, project);
         } catch (err) {
           console.error("❌ Error copiando media:", err);
         }
 
-        // ✅ 4. Guardar en el historial
         const passed = allLines.filter((l) => /\b\d+\spassed\b/.test(l)).length;
         const failed = allLines.filter((l) => /\b\d+\sfailed\b/.test(l)).length;
 
@@ -136,6 +132,7 @@ export async function POST(req: Request) {
           failed,
           screenshots,
           videos,
+          errors,
         };
 
         try {
@@ -157,8 +154,7 @@ export async function POST(req: Request) {
   });
 }
 
-// 🔁 Copiar archivos (incluyendo media)
-async function collectAndCopyMedia(srcDir: string, destDir: string, screenshots: string[], videos: string[], project: string) {
+async function collectAndCopyMedia(srcDir: string, destDir: string, screenshots: string[], videos: string[], errors: string[] ,project: string) {
   const entries = await fs.readdir(srcDir, { withFileTypes: true });
 
   for (const entry of entries) {
@@ -167,7 +163,7 @@ async function collectAndCopyMedia(srcDir: string, destDir: string, screenshots:
 
     if (entry.isDirectory()) {
       await fs.mkdir(destPath, { recursive: true });
-      await collectAndCopyMedia(srcPath, destPath, screenshots, videos, project);
+      await collectAndCopyMedia(srcPath, destPath, screenshots, videos, errors, project);
     } else {
       if (entry.name.endsWith(".png")) {
         await fs.copyFile(srcPath, destPath);
@@ -178,6 +174,11 @@ async function collectAndCopyMedia(srcDir: string, destDir: string, screenshots:
         await fs.copyFile(srcPath, destPath);
         const relativePath = path.relative(path.join(process.cwd(), "public"), destPath);
         videos.push(`/${relativePath.replace(/\\/g, "/")}`);
+      }
+      if (entry.name.endsWith(".txt") || entry.name.endsWith(".log")) {
+        const content = await fs.readFile(srcPath, "utf8");
+        const lines = content.split("\n").map((line) => line.trim()).filter(Boolean);
+        errors.push(...lines.slice(0, 10)); 
       }
     }
   }

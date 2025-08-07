@@ -22,7 +22,7 @@ import {
 } from "../components/ui/sidebar";
 
 import { FlaskConical, FileText, History, MessageCircle } from "lucide-react";
-import DeepseekChat from "../components/DeepseekChat";
+import AIChat from "../components/AIChat";
 import {
   Dialog,
   DialogTrigger,
@@ -144,9 +144,9 @@ export default function DashboardPage() {
         </DialogTrigger>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Deepseek Chat</DialogTitle>
+            <DialogTitle>AI Assistent PIP </DialogTitle>
           </DialogHeader>
-          <DeepseekChat />
+          <AIChat />
         </DialogContent>
       </Dialog>
     </SidebarProvider>
