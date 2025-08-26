@@ -127,7 +127,7 @@ export default function TestHistory() {
                     </TableCell>
                     <TableCell className="p-3">
                       {h.errors?.length > 0 ? (
-                        <ul className="list-disc list-inside text-red-500 text-sm">
+                        <ul className="list-disc list-inside text-red-500 text-sm max-h-32 overflow-y-auto">
                           {h.errors.map((e: string, idx: number) => (
                             <li key={idx}>{e}</li>
                           ))}

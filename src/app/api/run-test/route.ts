@@ -123,6 +123,13 @@ export async function POST(req: Request) {
         const passed = allLines.filter((l) => /\b\d+\spassed\b/.test(l)).length;
         const failed = allLines.filter((l) => /\b\d+\sfailed\b/.test(l)).length;
 
+        // Extract plain text error lines from the process output as a fallback
+        const lineErrors = allLines
+          .filter((l) => l.toLowerCase().includes("error"))
+          .slice(0, 10);
+        errors.push(...lineErrors);
+        const uniqueErrors = Array.from(new Set(errors)).slice(0, 10);
+
         const entry = {
           id: Date.now(),
           date: new Date().toISOString(),
@@ -132,7 +139,7 @@ export async function POST(req: Request) {
           failed,
           screenshots,
           videos,
-          errors,
+          errors: uniqueErrors,
         };
 
         try {
