@@ -1,16 +1,16 @@
 [
   {
-    "id": 1755551951149,
-    "date": "2025-08-18T21:19:11.149Z",
-    "testPath": "tests/pip/home/form.spec.ts",
+    "id": 1755560841073,
+    "date": "2025-08-18T23:47:21.073Z",
+    "testPath": "tests/pip/about/team-pip.spec.ts",
     "project": "pip",
     "passed": 0,
     "failed": 1,
     "screenshots": [
-      "/reports/pip/assets/pip-home-form-Submit-conta-5aa6d-nd-validate-success-message-pip/test-failed-1.png"
+      "/reports/pip/assets/pip-about-team-pip-team-me-19dfa-age-name-title-and-bio-link-pip/test-failed-1.png"
     ],
     "videos": [
-      "/reports/pip/assets/pip-home-form-Submit-conta-5aa6d-nd-validate-success-message-pip/video.webm"
+      "/reports/pip/assets/pip-about-team-pip-team-me-19dfa-age-name-title-and-bio-link-pip/video.webm"
     ],
     "errors": []
   }

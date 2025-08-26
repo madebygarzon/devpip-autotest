@@ -190,6 +190,18 @@ function SiteTestCard({ site }: { site: Site }) {
         label: "🔗 Run Menu Links Test",
         path: "tests/pip/home/menu-links.spec.ts",
       },
+      {
+        label: "📄 Run About Anchor Test",
+        path: "tests/pip/about/about-anchor.spec.ts",
+      },
+      {
+        label: "⏯️ Run About Videos Test",
+        path: "tests/pip/about/videos-visible.spec.ts",
+      },
+      {
+        label: "🧑🏻 Run About Team Test",
+        path: "tests/pip/about/team-pip.spec.ts",
+      },
     ],
     gradepotential: [
       { label: "📄 Run Form Home gp Test", path: "tests/gp/home/form.spec.ts" },
