@@ -30,7 +30,7 @@ test("team members load with valid image, name, title and bio link", async ({ pa
       await page.waitForTimeout(1500);
       src = await image.getAttribute("src");
       if (src?.startsWith("data:image")) {
-        throw new Error("La tarjeta tiene un placeholder en vez de una imagen real");
+        throw new Error("The card has a placeholder instead of a real image");
       }
     }
 

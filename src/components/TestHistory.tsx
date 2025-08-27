@@ -2,13 +2,9 @@
 
 import { useEffect, useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
+import { HelpCircle } from "lucide-react";
 
 interface TestRun {
   id: string;
@@ -21,8 +17,13 @@ interface TestRun {
   errors?: string[];
 }
 
-export default function TestHistory() {
-  const [history, setHistory] = useState<any[]>([]);
+interface TestHistoryProps {
+  // Called when user clicks the "Ask AI" icon on an error
+  onAskAI?: (prompt: string) => void;
+}
+
+export default function TestHistory({ onAskAI }: TestHistoryProps) {
+  const [history, setHistory] = useState<TestRun[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,11 +31,8 @@ export default function TestHistory() {
       try {
         const res = await fetch("/api/test-history");
         if (!res.ok) return;
-
-        const data: TestRun[] = await res.json(); // tipado explícito
-        setHistory(
-          data.sort((a, b) => b.failed - a.failed) // ahora a y b son TestRun
-        );
+        const data: TestRun[] = await res.json();
+        setHistory(data.sort((a, b) => b.failed - a.failed));
       } catch (err) {
         console.error("Error loading test history:", err);
       } finally {
@@ -44,6 +42,23 @@ export default function TestHistory() {
     fetchHistory();
   }, []);
 
+  // Build a helpful prompt with context for the AI
+  const buildPrompt = (error: string, run: TestRun) => {
+    // NOTE: Keep the prompt concise but contextual.
+    return [
+      `Explain this automated test error for a non-technical teammate.`,
+      `Include cause in plain language, likely root-cause, and next steps.`,
+      ``,
+      `Context:`,
+      `- Test: ${run.testPath}`,
+      `- Date: ${new Date(run.date).toLocaleString()}`,
+      `- Passed: ${run.passed} | Failed: ${run.failed}`,
+      ``,
+      `Error:`,
+      error
+    ].join("\n");
+  };
+
   return (
     <div className="w-full font-sans flex flex-col gap-10 p-6 sm:p-12">
       <div className="w-full">
@@ -51,7 +66,7 @@ export default function TestHistory() {
           Test History
         </h2>
         <p className="text-sm text-muted-foreground mb-4">
-          Summary of previous test runsS
+          Summary of previous test runs
         </p>
 
         {loading ? (
@@ -88,10 +103,10 @@ export default function TestHistory() {
                       {h.failed}
                     </TableCell>
 
-                    {/* ✅ Nueva columna: Screenshots */}
+                    {/* Screenshots */}
                     <TableCell className="p-3">
-                      {h.screenshots?.length > 0 ? (
-                        h.screenshots.map((src: string, idx: number) => (
+                      {h.screenshots?.length ? (
+                        h.screenshots.map((src, idx) => (
                           <a
                             key={idx}
                             href={src}
@@ -107,10 +122,10 @@ export default function TestHistory() {
                       )}
                     </TableCell>
 
-                    {/* ✅ Nueva columna: Videos */}
+                    {/* Videos */}
                     <TableCell className="p-3">
-                      {h.videos?.length > 0 ? (
-                        h.videos.map((src: string, idx: number) => (
+                      {h.videos?.length ? (
+                        h.videos.map((src, idx) => (
                           <a
                             key={idx}
                             href={src}
@@ -125,11 +140,26 @@ export default function TestHistory() {
                         <span className="text-gray-400">-</span>
                       )}
                     </TableCell>
+
+                    {/* Errors with "Ask AI" icon */}
                     <TableCell className="p-3">
-                      {h.errors?.length > 0 ? (
-                        <ul className="list-disc list-inside text-red-500 text-sm max-h-32 overflow-y-auto">
-                          {h.errors.map((e: string, idx: number) => (
-                            <li key={idx}>{e}</li>
+                      {h.errors?.length ? (
+                        <ul className="text-red-500 text-sm max-h-40 overflow-y-auto space-y-2">
+                          {h.errors.map((e, idx) => (
+                            <li key={idx} className="flex items-start gap-2">
+                              <span className="flex-1 break-words">
+                                {e}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => onAskAI?.(buildPrompt(e, h))}
+                                className="shrink-0 inline-flex items-center justify-center rounded-md border px-2 py-1 text-xs hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                title="Ask AI to explain this error"
+                                aria-label="Ask AI to explain this error"
+                              >
+                                <HelpCircle className="w-4 h-4" />
+                              </button>
+                            </li>
                           ))}
                         </ul>
                       ) : (

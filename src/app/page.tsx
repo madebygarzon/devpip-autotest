@@ -36,12 +36,20 @@ export default function DashboardPage() {
     "test"
   );
 
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatPrompt, setChatPrompt] = useState<string | null>(null);
+
+  const handleAskAI = (prompt: string) => {
+    setChatPrompt(prompt);
+    setChatOpen(true);
+  };
+
   const view = (() => {
     switch (tab) {
       case "test":
         return <TestContent />;
-      case "history":
-        return <TestHistory />;
+      case "history": 
+        return <TestHistory onAskAI={handleAskAI} />;
       case "temp":
         return <Temp />;
       case "ClarityKPIs":
@@ -136,17 +144,22 @@ export default function DashboardPage() {
           </div>
         </SidebarInset>
       </div>
-      <Dialog>
+       <Dialog open={chatOpen} onOpenChange={setChatOpen}>
+        {/* Floating button still works to open an empty chat */}
         <DialogTrigger asChild>
-          <button className="fixed bottom-4 right-4 rounded-full bg-blue-500 text-white p-3 shadow-lg">
+          <button
+            className="fixed bottom-4 right-4 rounded-full bg-blue-500 text-white p-3 shadow-lg"
+            onClick={() => { setChatPrompt(null); }} // clear seed if opened via FAB
+          >
             <MessageCircle className="w-5 h-5" />
           </button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>AI Assistent PIP </DialogTitle>
+            <DialogTitle>AI Assistent PIP</DialogTitle>
           </DialogHeader>
-          <AIChat />
+          {/* Pass the seed prompt to the chat */}
+          <AIChat initialMessage={chatPrompt ?? ""} />
         </DialogContent>
       </Dialog>
     </SidebarProvider>
