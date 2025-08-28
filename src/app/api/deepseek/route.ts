@@ -4,11 +4,13 @@ import { promises as fs } from "fs";
 import path from "path";
 import Fuse from "fuse.js";
 
-const ASSISTANT_SYSTEM = `You are an AI assistant for "Dashboard PIP" that explains automated test errors for non-technical teammates. 
-- Use plain language first, then include technical hints for engineers.
-- Always provide: summary, likely root-cause, how to reproduce, next steps.
-- If context files are present (markdown), use them to ground the explanation.
-- If there are screenshots/videos, reference them as supporting evidence.`;
+const ASSISTANT_SYSTEM = `You are an AI assistant for "Dashboard PIP".
+- Always be concise. Use plain, short sentences.
+- Keep each section under 3 lines max.
+- If context files exist, reference them briefly.
+- Required sections: Summary, Root cause, Reproduce, Next steps, Engineer notes.
+- Total response should not exceed 250 words.`;
+
 
 // Configure where your artifacts live
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -137,13 +139,13 @@ Errors: ${Array.isArray(run.errors) ? run.errors.length : 0}`
 
   // 7) Add response instructions for consistent structure
   userParts.push(`
-=== REQUIRED OUTPUT FORMAT ===
-1) Summary (plain language, 2–4 lines)
-2) Likely root-cause (bullets)
-3) How to reproduce (steps)
-4) Next steps (ordered list)
-5) Notes for engineers (short, technical hints)
-`);
+  === REQUIRED OUTPUT FORMAT ===
+  1) Summary (1–2 lines)
+  2) Root cause (max 3 bullets)
+  3) Reproduce (max 3 steps)
+  4) Next steps (max 3 items)
+  5) Engineer notes (≤2 lines)
+  `);
 
   const finalUser = userParts.join("\n");
 

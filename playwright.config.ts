@@ -17,11 +17,11 @@ export default defineConfig({
   projects: [
     {
       name: 'pip',
-      use: { baseURL: 'https://st.partnerinpublishing.com' },
+      use: { baseURL: 'https://partnerinpublishing.com' },
     },
     {
       name: 'gradepotential',
-      use: { baseURL: 'https://gradepotentialtutoring.ue1.rapydapps.cloud' },
+      use: { baseURL: 'https://www.gradepotentialtutoring.com' },
     },
     {
       name: 'itopia',
