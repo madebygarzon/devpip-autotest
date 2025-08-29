@@ -8,8 +8,8 @@ test("Service page links load successfully", async ({ page, context }) => {
       elements
         .map((el) => el.getAttribute("href"))
         .filter(
-          (href) =>
-            href &&
+          (href): href is string =>
+            typeof href === "string" &&
             href.startsWith("https://partnerinpublishing.com/services/") &&
             href !== "https://partnerinpublishing.com/services/"
         )

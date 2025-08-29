@@ -1,5 +1,294 @@
 [
   {
+    "id": 1756471982752,
+    "date": "2025-08-29T12:53:02.752Z",
+    "testPath": "tests/pip/home/home-anchor.spec.ts",
+    "project": "pip",
+    "passed": 1,
+    "failed": 0,
+    "screenshots": [],
+    "videos": [],
+    "errors": []
+  },
+  {
+    "id": 1756414829100,
+    "date": "2025-08-28T21:00:29.100Z",
+    "testPath": "tests/pip/home/menu-links-footer.spec.ts",
+    "project": "pip",
+    "passed": 0,
+    "failed": 1,
+    "screenshots": [
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-2.png"
+    ],
+    "videos": [
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video-1.webm",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video.webm"
+    ],
+    "errors": [
+      "[1/1] [pip] › tests/pip/home/menu-links-footer.spec.ts:5:5 › Validate footer menu links open without visual or HTTP errors",
+      "[pip] › tests/pip/home/menu-links-footer.spec.ts:5:5 › Validate footer menu links open without visual or HTTP errors",
+      "  1) [pip] › tests/pip/home/menu-links-footer.spec.ts:5:5 › Validate footer menu links open without visual or HTTP errors ",
+      "    Error: Link https://partnerinpublishing.com/privacy-new/ seems broken - contains: \"Error\"",
+      "    test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-2.png",
+      "    test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-1.png",
+      "    test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video-1.webm",
+      "    test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video.webm",
+      "    Error Context: test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/error-context.md",
+      "    test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/trace.zip"
+    ]
+  },
+  {
+    "id": 1756414086687,
+    "date": "2025-08-28T20:48:06.687Z",
+    "testPath": "all",
+    "project": "pip",
+    "passed": 1,
+    "failed": 1,
+    "screenshots": [
+      "/reports/pip/assets/gp-home-form-Submit-contact-form-successfully-pip/test-failed-1.png",
+      "/reports/pip/assets/itopia-home-form-Submit-contact-form-successfully-pip/test-failed-1.png",
+      "/reports/pip/assets/mm-home-form-Submit-contact-form-successfully-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-about-team-pip-team-me-19dfa-age-name-title-and-bio-link-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-about-videos-visible-a-6c867-e-lazy-loaded-and-clickable-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-form-Submit-conta-5aa6d-nd-validate-success-message-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-2.png"
+    ],
+    "videos": [
+      "/reports/pip/assets/gp-home-form-Submit-contact-form-successfully-pip/video.webm",
+      "/reports/pip/assets/itopia-home-form-Submit-contact-form-successfully-pip/video.webm",
+      "/reports/pip/assets/mm-home-form-Submit-contact-form-successfully-pip/video.webm",
+      "/reports/pip/assets/pip-about-team-pip-team-me-19dfa-age-name-title-and-bio-link-pip/video.webm",
+      "/reports/pip/assets/pip-about-videos-visible-a-6c867-e-lazy-loaded-and-clickable-pip/video.webm",
+      "/reports/pip/assets/pip-home-form-Submit-conta-5aa6d-nd-validate-success-message-pip/video.webm",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video-1.webm",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video.webm"
+    ],
+    "errors": [
+      "    Error: expect(received).toBe(expected) // Object.is equality",
+      "    Error Context: test-results/gp-home-form-Submit-contact-form-successfully-pip/error-context.md",
+      "    Error Context: test-results/itopia-home-form-Submit-contact-form-successfully-pip/error-context.md",
+      "    Error Context: test-results/mm-home-form-Submit-contact-form-successfully-pip/error-context.md",
+      "    Error: The card has a placeholder instead of a real image",
+      "    > 33 |         throw new Error(\"The card has a placeholder instead of a real image\");",
+      "    Error Context: test-results/pip-about-team-pip-team-me-19dfa-age-name-title-and-bio-link-pip/error-context.md",
+      "    Error: expect(received).toBeGreaterThanOrEqual(expected)"
+    ]
+  },
+  {
+    "id": 1756412774739,
+    "date": "2025-08-28T20:26:14.739Z",
+    "testPath": "tests/pip/home/home-cards-navigation.spec.ts",
+    "project": "pip",
+    "passed": 1,
+    "failed": 0,
+    "screenshots": [],
+    "videos": [],
+    "errors": []
+  },
+  {
+    "id": 1756412676444,
+    "date": "2025-08-28T20:24:36.444Z",
+    "testPath": "tests/pip/home/home-cards-navigation.spec.ts",
+    "project": "pip",
+    "passed": 0,
+    "failed": 1,
+    "screenshots": [
+      "/reports/pip/assets/pip-home-home-cards-naviga-1107a-ces-innovation-marketplace--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-2c3fb-m-services-brand-awareness--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-42609-s-web-development-services--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-46bd2-services-digital-marketing--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-a4797--video-production-services--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-b2b4e-ng-com-talent-search-group--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e2ba8-m-services-market-research--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e7527-iness-strategy-development--pip/test-failed-1.png"
+    ],
+    "videos": [
+      "/reports/pip/assets/pip-home-home-cards-naviga-1107a-ces-innovation-marketplace--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-2c3fb-m-services-brand-awareness--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-42609-s-web-development-services--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-46bd2-services-digital-marketing--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-a4797--video-production-services--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-b2b4e-ng-com-talent-search-group--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e2ba8-m-services-market-research--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e7527-iness-strategy-development--pip/video.webm"
+    ],
+    "errors": [
+      "    Error: Timed out 5000ms waiting for expect(locator).toHaveAttribute(expected)",
+      "    Error Context: test-results/pip-home-home-cards-naviga-2c3fb-m-services-brand-awareness--pip/error-context.md",
+      "    Error Context: test-results/pip-home-home-cards-naviga-e7527-iness-strategy-development--pip/error-context.md",
+      "    Error Context: test-results/pip-home-home-cards-naviga-46bd2-services-digital-marketing--pip/error-context.md",
+      "    Error Context: test-results/pip-home-home-cards-naviga-1107a-ces-innovation-marketplace--pip/error-context.md",
+      "    Error Context: test-results/pip-home-home-cards-naviga-e2ba8-m-services-market-research--pip/error-context.md"
+    ]
+  },
+  {
+    "id": 1756412597555,
+    "date": "2025-08-28T20:23:17.555Z",
+    "testPath": "tests/pip/home/home-anchor.spec.ts",
+    "project": "pip",
+    "passed": 1,
+    "failed": 0,
+    "screenshots": [],
+    "videos": [],
+    "errors": []
+  },
+  {
+    "id": 1756412554581,
+    "date": "2025-08-28T20:22:34.581Z",
+    "testPath": "all",
+    "project": "pip",
+    "passed": 1,
+    "failed": 1,
+    "screenshots": [
+      "/reports/pip/assets/gp-home-form-Submit-contact-form-successfully-pip/test-failed-1.png",
+      "/reports/pip/assets/itopia-home-form-Submit-contact-form-successfully-pip/test-failed-1.png",
+      "/reports/pip/assets/mm-home-form-Submit-contact-form-successfully-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-about-team-pip-team-me-19dfa-age-name-title-and-bio-link-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-about-videos-visible-a-6c867-e-lazy-loaded-and-clickable-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-form-Submit-conta-5aa6d-nd-validate-success-message-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-1107a-ces-innovation-marketplace--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-2c3fb-m-services-brand-awareness--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-42609-s-web-development-services--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-46bd2-services-digital-marketing--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-a4797--video-production-services--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-b2b4e-ng-com-talent-search-group--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e2ba8-m-services-market-research--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e7527-iness-strategy-development--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-2.png"
+    ],
+    "videos": [
+      "/reports/pip/assets/gp-home-form-Submit-contact-form-successfully-pip/video.webm",
+      "/reports/pip/assets/itopia-home-form-Submit-contact-form-successfully-pip/video.webm",
+      "/reports/pip/assets/mm-home-form-Submit-contact-form-successfully-pip/video.webm",
+      "/reports/pip/assets/pip-about-team-pip-team-me-19dfa-age-name-title-and-bio-link-pip/video.webm",
+      "/reports/pip/assets/pip-about-videos-visible-a-6c867-e-lazy-loaded-and-clickable-pip/video.webm",
+      "/reports/pip/assets/pip-home-form-Submit-conta-5aa6d-nd-validate-success-message-pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-1107a-ces-innovation-marketplace--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-2c3fb-m-services-brand-awareness--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-42609-s-web-development-services--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-46bd2-services-digital-marketing--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-a4797--video-production-services--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-b2b4e-ng-com-talent-search-group--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e2ba8-m-services-market-research--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e7527-iness-strategy-development--pip/video.webm",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video-1.webm",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video.webm"
+    ],
+    "errors": [
+      "    Error: expect(received).toBe(expected) // Object.is equality",
+      "    Error Context: test-results/gp-home-form-Submit-contact-form-successfully-pip/error-context.md",
+      "    Error Context: test-results/itopia-home-form-Submit-contact-form-successfully-pip/error-context.md",
+      "    Error Context: test-results/mm-home-form-Submit-contact-form-successfully-pip/error-context.md",
+      "    Error: The card has a placeholder instead of a real image",
+      "    > 33 |         throw new Error(\"The card has a placeholder instead of a real image\");",
+      "    Error Context: test-results/pip-about-team-pip-team-me-19dfa-age-name-title-and-bio-link-pip/error-context.md",
+      "    Error: expect(received).toBeGreaterThanOrEqual(expected)"
+    ]
+  },
+  {
+    "id": 1756412339378,
+    "date": "2025-08-28T20:18:59.378Z",
+    "testPath": "all",
+    "project": "pip",
+    "passed": 1,
+    "failed": 1,
+    "screenshots": [
+      "/reports/pip/assets/gp-home-form-Submit-contact-form-successfully-pip/test-failed-1.png",
+      "/reports/pip/assets/itopia-home-form-Submit-contact-form-successfully-pip/test-failed-1.png",
+      "/reports/pip/assets/mm-home-form-Submit-contact-form-successfully-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-about-team-pip-team-me-19dfa-age-name-title-and-bio-link-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-about-videos-visible-a-6c867-e-lazy-loaded-and-clickable-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-form-Submit-conta-5aa6d-nd-validate-success-message-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-1107a-ces-innovation-marketplace--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-2c3fb-m-services-brand-awareness--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-42609-s-web-development-services--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-46bd2-services-digital-marketing--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-a4797--video-production-services--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-b2b4e-ng-com-talent-search-group--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e2ba8-m-services-market-research--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e7527-iness-strategy-development--pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-2.png"
+    ],
+    "videos": [
+      "/reports/pip/assets/gp-home-form-Submit-contact-form-successfully-pip/video.webm",
+      "/reports/pip/assets/itopia-home-form-Submit-contact-form-successfully-pip/video.webm",
+      "/reports/pip/assets/mm-home-form-Submit-contact-form-successfully-pip/video.webm",
+      "/reports/pip/assets/pip-about-team-pip-team-me-19dfa-age-name-title-and-bio-link-pip/video.webm",
+      "/reports/pip/assets/pip-about-videos-visible-a-6c867-e-lazy-loaded-and-clickable-pip/video.webm",
+      "/reports/pip/assets/pip-home-form-Submit-conta-5aa6d-nd-validate-success-message-pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-1107a-ces-innovation-marketplace--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-2c3fb-m-services-brand-awareness--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-42609-s-web-development-services--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-46bd2-services-digital-marketing--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-a4797--video-production-services--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-b2b4e-ng-com-talent-search-group--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e2ba8-m-services-market-research--pip/video.webm",
+      "/reports/pip/assets/pip-home-home-cards-naviga-e7527-iness-strategy-development--pip/video.webm",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video-1.webm",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video.webm"
+    ],
+    "errors": [
+      "    Error: expect(received).toBe(expected) // Object.is equality",
+      "    Error Context: test-results/gp-home-form-Submit-contact-form-successfully-pip/error-context.md",
+      "    Error Context: test-results/itopia-home-form-Submit-contact-form-successfully-pip/error-context.md",
+      "    Error Context: test-results/mm-home-form-Submit-contact-form-successfully-pip/error-context.md",
+      "    Error: The card has a placeholder instead of a real image",
+      "    > 33 |         throw new Error(\"The card has a placeholder instead of a real image\");",
+      "    Error Context: test-results/pip-about-team-pip-team-me-19dfa-age-name-title-and-bio-link-pip/error-context.md",
+      "    Error: expect(received).toBeGreaterThanOrEqual(expected)"
+    ]
+  },
+  {
+    "id": 1756407255583,
+    "date": "2025-08-28T18:54:15.583Z",
+    "testPath": "tests/pip/home/menu-links-footer.spec.ts",
+    "project": "pip",
+    "passed": 0,
+    "failed": 1,
+    "screenshots": [
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-1.png",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-2.png"
+    ],
+    "videos": [
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video-1.webm",
+      "/reports/pip/assets/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video.webm"
+    ],
+    "errors": [
+      "[1/1] [pip] › tests/pip/home/menu-links-footer.spec.ts:5:5 › Validate footer menu links open without visual or HTTP errors",
+      "[pip] › tests/pip/home/menu-links-footer.spec.ts:5:5 › Validate footer menu links open without visual or HTTP errors",
+      "  1) [pip] › tests/pip/home/menu-links-footer.spec.ts:5:5 › Validate footer menu links open without visual or HTTP errors ",
+      "    Error: Link https://partnerinpublishing.com/privacy-new/ seems broken - contains: \"Error\"",
+      "    test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-1.png",
+      "    test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/test-failed-2.png",
+      "    test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video-1.webm",
+      "    test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/video.webm",
+      "    Error Context: test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/error-context.md",
+      "    test-results/pip-home-menu-links-footer-c9d24-thout-visual-or-HTTP-errors-pip/trace.zip"
+    ]
+  },
+  {
+    "id": 1756406926303,
+    "date": "2025-08-28T18:48:46.303Z",
+    "testPath": "tests/pip/about/videos-visible.spec.ts",
+    "project": "pip",
+    "passed": 0,
+    "failed": 1,
+    "screenshots": [
+      "/reports/pip/assets/pip-about-videos-visible-a-6c867-e-lazy-loaded-and-clickable-pip/test-failed-1.png"
+    ],
+    "videos": [
+      "/reports/pip/assets/pip-about-videos-visible-a-6c867-e-lazy-loaded-and-clickable-pip/video.webm"
+    ],
+    "errors": [
+      "    Error: expect(received).toBeGreaterThanOrEqual(expected)",
+      "    Error Context: test-results/pip-about-videos-visible-a-6c867-e-lazy-loaded-and-clickable-pip/error-context.md"
+    ]
+  },
+  {
     "id": 1756394080265,
     "date": "2025-08-28T15:14:40.265Z",
     "testPath": "tests/pip/about/team-pip.spec.ts",

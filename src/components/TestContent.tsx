@@ -334,7 +334,7 @@ function SiteTestCard({ site }: { site: Site }) {
           <DialogHeader>
             <DialogTitle className="text-cyan-300">{site.name} — Test Output</DialogTitle>
             <DialogDescription className="text-white/60">
-              Resumen visual y salida completa del test seleccionado.
+              Visual summary and full output of the selected test.
             </DialogDescription>
           </DialogHeader>
 

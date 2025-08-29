@@ -17,7 +17,7 @@ export default defineConfig({
   projects: [
     {
       name: 'pip',
-      use: { baseURL: 'https://partnerinpublishing.com' },
+      use: { baseURL: 'https://partnerinpublishing.com/' },
     },
     {
       name: 'gradepotential',
