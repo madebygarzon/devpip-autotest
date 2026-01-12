@@ -1,11 +1,17 @@
 [
   {
-    "date": "2025-07-25",
+    "date": "2026-01-12",
     "totals": {
       "sessions": 3,
       "engagementTimeAvg": 103,
       "rageClicks": 3,
-      "deadClicks": 3
+      "deadClicks": 3,
+      "distinctUsers": 3,
+      "scrollDepthAvg": 0,
+      "quickBackClicks": 0,
+      "excessiveScrolls": 0,
+      "scriptErrors": 0,
+      "errorClicks": 0
     },
     "byDevice": {
       "Mobile": 1,
@@ -33,11 +39,6 @@
       "OrganicSearch": 4,
       "Referral": 1
     },
-    "byReferrer": {
-      "partnerinpublishing.com": 7,
-      "www.google.com": 4,
-      "linktr.ee": 1
-    },
     "byCountry": {},
     "topPages": [
       {
@@ -60,6 +61,21 @@
         "url": "(https://partnerinpublishing.com/talent-search-group/client-openings/)",
         "sessions": 3
       }
-    ]
+    ],
+    "topReferrers": [
+      {
+        "url": "partnerinpublishing.com",
+        "sessions": 7
+      },
+      {
+        "url": "www.google.com",
+        "sessions": 4
+      },
+      {
+        "url": "linktr.ee",
+        "sessions": 1
+      }
+    ],
+    "bySource": {}
   }
 ]

@@ -1,0 +1,240 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Project model to store information about different projects
+model Project {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  url         String
+  description String?
+  favicon     String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  testRuns    TestRun[]
+
+  @@map("projects")
+}
+
+// TestRun model to store test execution history
+model TestRun {
+  id          String   @id @default(cuid())
+  legacyId    BigInt?  @unique // To store the old timestamp ID from JSON file
+  testPath    String   // Path to the test file or "all" for all tests
+  passed      Int      @default(0)
+  failed      Int      @default(0)
+  duration    Int?     // Duration in milliseconds
+  createdAt   DateTime @default(now())
+
+  // Foreign keys
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Relations
+  media       TestMedia[]
+  errors      TestError[]
+
+  @@index([projectId])
+  @@index([createdAt])
+  @@index([testPath])
+  @@map("test_runs")
+}
+
+// TestMedia model to store screenshots and videos
+model TestMedia {
+  id        String   @id @default(cuid())
+  type      MediaType // screenshot or video
+  url       String
+  fileName  String
+  createdAt DateTime @default(now())
+
+  // Foreign keys
+  testRunId String
+  testRun   TestRun  @relation(fields: [testRunId], references: [id], onDelete: Cascade)
+
+  @@index([testRunId])
+  @@map("test_media")
+}
+
+// TestError model to store error messages
+model TestError {
+  id        String   @id @default(cuid())
+  message   String   @db.Text
+  stack     String?  @db.Text
+  createdAt DateTime @default(now())
+
+  // Foreign keys
+  testRunId String
+  testRun   TestRun  @relation(fields: [testRunId], references: [id], onDelete: Cascade)
+
+  @@index([testRunId])
+  @@map("test_errors")
+}
+
+// Enum for media types
+enum MediaType {
+  SCREENSHOT
+  VIDEO
+}
+
+// ============================================
+// MICROSOFT CLARITY ANALYTICS MODELS
+// ============================================
+
+// ClaritySnapshot model to store daily analytics snapshots
+model ClaritySnapshot {
+  id        String   @id @default(cuid())
+  date      DateTime @unique @db.Date // The date this snapshot represents
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Totals (aggregated metrics)
+  sessions            Int     @default(0)
+  distinctUsers       Int     @default(0)
+  engagementTimeAvg   Float   @default(0) // in seconds
+  scrollDepthAvg      Float   @default(0) // percentage
+  rageClicks          Int     @default(0)
+  deadClicks          Int     @default(0)
+  quickBackClicks     Int     @default(0)
+  excessiveScrolls    Int     @default(0)
+  scriptErrors        Int     @default(0)
+  errorClicks         Int     @default(0)
+
+  // Relations
+  devices       ClarityDevice[]
+  browsers      ClarityBrowser[]
+  operatingSystems ClarityOS[]
+  countries     ClarityCountry[]
+  sources       ClaritySource[]
+  channels      ClarityChannel[]
+  pages         ClarityPage[]
+  referrers     ClarityReferrer[]
+
+  @@index([date(sort: Desc)])
+  @@map("clarity_snapshots")
+}
+
+// Device breakdown
+model ClarityDevice {
+  id         String   @id @default(cuid())
+  snapshotId String
+  snapshot   ClaritySnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  deviceType String   // Desktop, Mobile, Tablet, etc.
+  sessions   Int      @default(0)
+
+  @@unique([snapshotId, deviceType])
+  @@index([snapshotId])
+  @@map("clarity_devices")
+}
+
+// Browser breakdown
+model ClarityBrowser {
+  id         String   @id @default(cuid())
+  snapshotId String
+  snapshot   ClaritySnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  browserName String  // Chrome, Firefox, Safari, etc.
+  sessions    Int     @default(0)
+
+  @@unique([snapshotId, browserName])
+  @@index([snapshotId])
+  @@map("clarity_browsers")
+}
+
+// Operating System breakdown
+model ClarityOS {
+  id         String   @id @default(cuid())
+  snapshotId String
+  snapshot   ClaritySnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  osName     String   // Windows, macOS, iOS, Android, etc.
+  sessions   Int      @default(0)
+
+  @@unique([snapshotId, osName])
+  @@index([snapshotId])
+  @@map("clarity_os")
+}
+
+// Country breakdown
+model ClarityCountry {
+  id          String   @id @default(cuid())
+  snapshotId  String
+  snapshot    ClaritySnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  countryCode String   // US, CO, MX, etc.
+  sessions    Int      @default(0)
+
+  @@unique([snapshotId, countryCode])
+  @@index([snapshotId])
+  @@map("clarity_countries")
+}
+
+// Traffic Source breakdown
+model ClaritySource {
+  id         String   @id @default(cuid())
+  snapshotId String
+  snapshot   ClaritySnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  sourceName String   // Direct, Google, Facebook, etc.
+  sessions   Int      @default(0)
+
+  @@unique([snapshotId, sourceName])
+  @@index([snapshotId])
+  @@map("clarity_sources")
+}
+
+// Channel breakdown
+model ClarityChannel {
+  id          String   @id @default(cuid())
+  snapshotId  String
+  snapshot    ClaritySnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  channelName String   // Organic, Paid, Direct, Referral, etc.
+  sessions    Int      @default(0)
+
+  @@unique([snapshotId, channelName])
+  @@index([snapshotId])
+  @@map("clarity_channels")
+}
+
+// Top Pages
+model ClarityPage {
+  id         String   @id @default(cuid())
+  snapshotId String
+  snapshot   ClaritySnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  url        String   @db.Text
+  pageTitle  String?  @db.Text
+  sessions   Int      @default(0)
+
+  @@unique([snapshotId, url])
+  @@index([snapshotId])
+  @@index([sessions(sort: Desc)])
+  @@map("clarity_pages")
+}
+
+// Top Referrers
+model ClarityReferrer {
+  id         String   @id @default(cuid())
+  snapshotId String
+  snapshot   ClaritySnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  url        String   @db.Text
+  sessions   Int      @default(0)
+
+  @@unique([snapshotId, url])
+  @@index([snapshotId])
+  @@index([sessions(sort: Desc)])
+  @@map("clarity_referrers")
+}

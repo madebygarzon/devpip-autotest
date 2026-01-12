@@ -3,8 +3,7 @@ import { spawn } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
 import * as cheerio from "cheerio";
-
-const historyFile = path.join(process.cwd(), "data", "testHistory.json");
+import { createTestRun } from "@/lib/db";
 
 const PROJECT_FAVICONS: Record<string, string> = {
   pip: "https://partnerinpublishing.com/wp-content/uploads/2024/05/cropped-Group-3.png",
@@ -130,25 +129,21 @@ export async function POST(req: Request) {
         errors.push(...lineErrors);
         const uniqueErrors = Array.from(new Set(errors)).slice(0, 10);
 
-        const entry = {
-          id: Date.now(),
-          date: new Date().toISOString(),
-          testPath: testPath || "all",
-          project,
-          passed,
-          failed,
-          screenshots,
-          videos,
-          errors: uniqueErrors,
-        };
-
+        // Save test run to database
         try {
-          await fs.mkdir(path.dirname(historyFile), { recursive: true });
-          const existing = await fs.readFile(historyFile, "utf-8").then((d) => JSON.parse(d)).catch(() => []);
-          existing.unshift(entry);
-          await fs.writeFile(historyFile, JSON.stringify(existing, null, 2));
+          await createTestRun({
+            testPath: testPath || "all",
+            project,
+            passed,
+            failed,
+            screenshots,
+            videos,
+            errors: uniqueErrors,
+            legacyId: Date.now(), // Store the timestamp as legacy ID for compatibility
+          });
+          console.log("✅ Test run saved to database");
         } catch (e) {
-          console.error("❌ Error escribiendo historial:", e);
+          console.error("❌ Error saving to database:", e);
         }
 
         controller.close();
