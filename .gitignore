@@ -42,3 +42,4 @@ next-env.d.ts
 test-results
 
 /src/generated/prisma
+/docs
