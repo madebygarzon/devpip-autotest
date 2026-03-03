@@ -15,24 +15,17 @@ export default function ClarityDevicesChart() {
   }));
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-light text-white tracking-tight">Device Analytics</h1>
-        <p className="text-white/50 text-sm">Session distribution by device type</p>
-      </div>
-
-      {/* Chart Card */}
+    <div className="space-y-4">
+      <h3 className="text-xl font-medium text-white">Sessions by Device</h3>
       <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8">
-        <h3 className="text-xl font-medium text-white mb-6">Sesiones por Dispositivo</h3>
         <div className="flex justify-center">
-          <PieChart width={400} height={400}>
+          <PieChart width={400} height={350}>
             <Pie
               data={data}
               cx="50%"
               cy="50%"
               labelLine={false}
-              outerRadius={120}
+              outerRadius={100}
               dataKey="value"
               label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
             >

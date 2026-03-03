@@ -10,6 +10,7 @@ import ClarityTrafficSources from "@/components/dashboard/ClarityTrafficSources"
 import ClarityReferrers from "@/components/dashboard/ClarityReferrers";
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 export default function ClarityDashboardContent() {
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -24,31 +25,94 @@ export default function ClarityDashboardContent() {
       if (data.ok) {
         if (data.fromCache && data.apiCallsSaved) {
           // Snapshot already exists for today
-          alert("✅ Ya existe un snapshot para hoy. No se consumió ninguna llamada API adicional.\n\nLos datos están actualizados.");
+          await Swal.fire({
+            icon: "success",
+            title: "Data Already Up to Date",
+            html: `
+              <div class="text-left space-y-2">
+                <p>✅ A snapshot for today already exists.</p>
+                <p>📊 No additional API calls were consumed.</p>
+                <p class="text-sm text-gray-400 mt-3">The data is already up to date and will refresh automatically tomorrow.</p>
+              </div>
+            `,
+            confirmButtonText: "Got it",
+            confirmButtonColor: "#10b981",
+            background: "#1e293b",
+            color: "#fff",
+          });
         } else {
           // Fresh data fetched
-          alert("✅ Datos actualizados desde la API de Clarity.\n\nNuevo snapshot guardado en la base de datos.");
+          await Swal.fire({
+            icon: "success",
+            title: "Data Refreshed Successfully",
+            html: `
+              <div class="text-left space-y-2">
+                <p>✅ Data updated from Clarity API.</p>
+                <p>💾 New snapshot saved to database.</p>
+              </div>
+            `,
+            confirmButtonText: "Awesome",
+            confirmButtonColor: "#10b981",
+            background: "#1e293b",
+            color: "#fff",
+          });
         }
         // Reload the page to get fresh data
         window.location.reload();
       } else if (data.warning) {
         // Rate limit or error - showing cached data
         if (data.limitReached) {
-          alert(
-            "⚠️ LÍMITE DIARIO ALCANZADO\n\n" +
-            "Has alcanzado el límite de 10 llamadas API por día de Microsoft Clarity.\n\n" +
-            "📊 Mostrando datos guardados en la base de datos.\n\n" +
-            "💡 Los datos se refrescarán automáticamente mañana."
-          );
+          await Swal.fire({
+            icon: "warning",
+            title: "Daily Limit Reached",
+            html: `
+              <div class="text-left space-y-3">
+                <p class="font-semibold text-yellow-400">⚠️ API Limit Reached</p>
+                <p>You have reached the limit of 10 API calls per day for Microsoft Clarity.</p>
+                <p>📊 Showing data saved in the database.</p>
+                <p class="text-sm text-gray-400 mt-3">💡 The data will refresh automatically tomorrow.</p>
+              </div>
+            `,
+            confirmButtonText: "Understood",
+            confirmButtonColor: "#f59e0b",
+            background: "#1e293b",
+            color: "#fff",
+          });
         } else {
-          alert(data.warning + "\n\nMostrando datos guardados en la base de datos.");
+          await Swal.fire({
+            icon: "info",
+            title: "Using Cached Data",
+            html: `
+              <div class="text-left space-y-2">
+                <p>${data.warning}</p>
+                <p class="text-sm text-gray-400 mt-2">📊 Showing data saved in the database.</p>
+              </div>
+            `,
+            confirmButtonText: "OK",
+            confirmButtonColor: "#3b82f6",
+            background: "#1e293b",
+            color: "#fff",
+          });
         }
         // Still reload to show any data we have
         window.location.reload();
       }
     } catch (error) {
       console.error("Error refreshing Clarity data:", error);
-      alert("❌ Error al refrescar datos.\n\nPor favor intenta nuevamente.");
+      await Swal.fire({
+        icon: "error",
+        title: "Error Refreshing Data",
+        html: `
+          <div class="text-left space-y-2">
+            <p>❌ An error occurred while refreshing the data.</p>
+            <p class="text-sm text-gray-400 mt-2">Please try again in a few moments.</p>
+          </div>
+        `,
+        confirmButtonText: "Try Again",
+        confirmButtonColor: "#ef4444",
+        background: "#1e293b",
+        color: "#fff",
+      });
     } finally {
       setIsRefreshing(false);
     }
@@ -81,16 +145,23 @@ export default function ClarityDashboardContent() {
         <ClarityKPIs />
       </section>
 
-      {/* Charts Grid - Devices, Browsers, OS */}
-      <section className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1">
-          <ClarityDevicesChart />
+      {/* Device Analytics Section */}
+      <section className="space-y-6">
+        <div className="space-y-2">
+          <h2 className="text-3xl font-light text-white tracking-tight">Device Analytics</h2>
+          <p className="text-white/50 text-sm">Session distribution by device type, browser, and operating system</p>
         </div>
-        <div className="lg:col-span-1">
-          <ClarityBrowserChart />
-        </div>
-        <div className="lg:col-span-1">
-          <ClarityOSChart />
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-1">
+            <ClarityDevicesChart />
+          </div>
+          <div className="lg:col-span-1">
+            <ClarityBrowserChart />
+          </div>
+          <div className="lg:col-span-1">
+            <ClarityOSChart />
+          </div>
         </div>
       </section>
 
@@ -114,53 +185,7 @@ export default function ClarityDashboardContent() {
         <ClarityReferrers />
       </section>
 
-      {/* Footer Note */}
-      <div className="text-center text-white/40 text-sm pt-8 border-t border-white/10 space-y-3">
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-            <span className="text-emerald-400 font-medium">💾 Stored in PostgreSQL</span>
-          </div>
-          <div className="px-3 py-1 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-            <span className="text-blue-400 font-medium">⚡ Always Available</span>
-          </div>
-        </div>
-
-        <p>
-          Data is stored in PostgreSQL database • Limited to 10 Clarity API calls per day
-        </p>
-
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/[0.02] border border-white/10 rounded-lg">
-          <span className="text-white/60">Strategy:</span>
-          <span className="font-medium text-blue-400">
-            {process.env.NEXT_PUBLIC_CLARITY_API_STRATEGY || 'minimal'}
-          </span>
-          <span className="text-white/40">•</span>
-          <span className="text-white/60">
-            {process.env.NEXT_PUBLIC_CLARITY_API_STRATEGY === 'full' ? '5' :
-             process.env.NEXT_PUBLIC_CLARITY_API_STRATEGY === 'balanced' ? '3' : '2'} calls per refresh
-          </span>
-        </div>
-
-        <div className="mt-4 p-4 bg-blue-500/5 border border-blue-500/20 rounded-lg max-w-2xl mx-auto">
-          <p className="text-white/70 text-xs leading-relaxed">
-            <strong className="text-white/90">💡 Smart API Usage:</strong> The system checks if today's snapshot already exists before making API calls.
-            Multiple refreshes in the same day won't consume additional API quota.
-            Data is permanently stored in the database and always accessible.
-          </p>
-        </div>
-
-        <p className="mt-2">
-          Learn more about the{" "}
-          <a
-            href="https://learn.microsoft.com/en-us/clarity/setup-and-installation/clarity-data-export-api"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-400 hover:text-blue-300 underline"
-          >
-            Clarity Data Export API
-          </a>
-        </p>
-      </div>
+      
     </div>
   );
 }

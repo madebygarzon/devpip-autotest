@@ -4,9 +4,11 @@ import { chromium } from "playwright";
 
 export async function GET(req: Request) {
   try {
-    // 1️⃣ Obtener el parámetro `project` de la URL
+    // 1️⃣ Obtener parámetros de la URL
     const { searchParams } = new URL(req.url);
     const project = searchParams.get("project") || "pip";
+    const category = searchParams.get("category") || "";
+    const test = searchParams.get("test") || "";
 
     // 2️⃣ Ruta dinámica del reporte
     const reportPath = path.join(process.cwd(), "public", "reports", project, "index.html");
@@ -46,12 +48,36 @@ export async function GET(req: Request) {
 
     await browser.close();
 
-    // 6️⃣ Responder con el PDF y nombre dinámico
+    // 6️⃣ Generar nombre descriptivo para el PDF
+    const generateFilename = () => {
+      const timestamp = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+      // Clean category/test names for filename (remove emojis and special chars)
+      const cleanString = (str: string) =>
+        str.replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').toLowerCase();
+
+      if (category && category !== "all") {
+        // Use category name
+        const categoryClean = cleanString(category);
+        return `${project}-${categoryClean}-${timestamp}.pdf`;
+      } else if (test && test !== "all") {
+        // Extract test name from path (e.g., "tests/pip/home/form.spec.ts" -> "form")
+        const testName = test.split('/').pop()?.replace('.spec.ts', '') || 'test';
+        return `${project}-${testName}-${timestamp}.pdf`;
+      } else {
+        // Default: all tests
+        return `${project}-all-tests-${timestamp}.pdf`;
+      }
+    };
+
+    const filename = generateFilename();
+
+    // 7️⃣ Responder con el PDF y nombre descriptivo
     return new NextResponse(pdfBuffer, {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="${project}-report.pdf"`,
+        "Content-Disposition": `attachment; filename="${filename}"`,
       },
     });
   } catch (error) {

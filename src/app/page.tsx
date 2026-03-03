@@ -178,6 +178,7 @@ export default function DashboardPage() {
                 <span className="text-xs font-medium text-white/70">System Status</span>
               </div>
               <p className="text-[10px] text-white/40">v2.0.0 • All systems operational</p>
+              <p className="text-[10px] text-white/40">Dev Team PIP</p>
             </div>
           </div>
       </Sidebar>

@@ -2,10 +2,11 @@
 
 import { useClarity } from "@/hooks/useClarity";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Globe, Info } from "lucide-react";
 
 export default function ClarityCountriesChart() {
   const { latest } = useClarity();
-  if (!latest || !latest.byCountry) return null;
+  if (!latest) return null;
 
   const data = Object.entries(latest.byCountry || {})
     .map(([country, value]) => ({
@@ -15,7 +16,31 @@ export default function ClarityCountriesChart() {
     .sort((a, b) => b.sessions - a.sessions)
     .slice(0, 10); // Top 10 countries
 
-  if (data.length === 0) return null;
+  const apiStrategy = process.env.NEXT_PUBLIC_CLARITY_API_STRATEGY || 'minimal';
+
+  if (data.length === 0) {
+    return (
+      <div className="space-y-4">
+        <h3 className="text-xl font-medium text-white">Top 10 Countries</h3>
+        <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 backdrop-blur-sm border border-emerald-500/30 rounded-2xl p-8">
+          <div className="flex items-start gap-4">
+            <div className="shrink-0 w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+              <Globe className="w-6 h-6 text-emerald-400" />
+            </div>
+            <div className="space-y-2">
+              <h4 className="text-lg font-medium text-white">Country Data Not Available</h4>
+              <p className="text-sm text-white/70">
+                Geographic data requires the <code className="px-2 py-1 bg-white/10 rounded text-emerald-300 font-mono text-xs">balanced</code> or <code className="px-2 py-1 bg-white/10 rounded text-emerald-300 font-mono text-xs">full</code> API strategy.
+              </p>
+              <p className="text-xs text-white/50 mt-2">
+                Current strategy: <span className="text-emerald-400 font-semibold">{apiStrategy}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">

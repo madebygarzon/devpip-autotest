@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "App Auto Testing",
-  description: "Automated testing for Next.js applications",
+  title: "Partner in Publishing - Automated Testing",
+  description: "Automated testing dashboard for Partner in Publishing and client websites",
+  icons: {
+    icon: "https://partnerinpublishing.com/wp-content/uploads/2024/05/cropped-Group-3.png",
+  },
 };
 
 export default function RootLayout({

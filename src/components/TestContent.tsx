@@ -65,6 +65,7 @@ export default function TestContent() {
 // ---------- Card ----------
 function SiteTestCard({ site }: { site: Site }) {
   const [selectedTest, setSelectedTest] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [autoRunInterval, setAutoRunInterval] = useState<number>(12 * 60 * 60 * 1000);
   const [nextRunIn, setNextRunIn] = useState<number>(autoRunInterval);
   const [isLoading, setIsLoading] = useState(false);
@@ -73,8 +74,44 @@ function SiteTestCard({ site }: { site: Site }) {
   const [logLines, setLogLines] = useState<string[]>([]);
   const [activeLogTab, setActiveLogTab] = useState<"summary" | "raw">("summary");
 
-  const passedCount = logLines.filter((l) => l.includes("passed")).length;
-  const failedCount = logLines.filter((l) => l.includes("failed")).length;
+  // Parse test results more accurately
+  const passedCount = useMemo(() => {
+    // Count lines that show individual passing tests or summary lines
+    // Examples: "✓ test name" or "5 passed"
+    let count = 0;
+    logLines.forEach(line => {
+      // Check for individual passing test markers
+      if (line.match(/^\s*✓/) || line.match(/^\s*✅/)) {
+        count++;
+      }
+      // Also check for summary line like "5 passed"
+      const summaryMatch = line.match(/(\d+)\s+passed/i);
+      if (summaryMatch) {
+        const num = parseInt(summaryMatch[1], 10);
+        if (num > count) count = num; // Use summary if it's higher
+      }
+    });
+    return count;
+  }, [logLines]);
+
+  const failedCount = useMemo(() => {
+    // Count lines that show individual failing tests or summary lines
+    // Examples: "✕ test name" or "3 failed"
+    let count = 0;
+    logLines.forEach(line => {
+      // Check for individual failing test markers
+      if (line.match(/^\s*✕/) || line.match(/^\s*❌/)) {
+        count++;
+      }
+      // Also check for summary line like "3 failed"
+      const summaryMatch = line.match(/(\d+)\s+failed/i);
+      if (summaryMatch) {
+        const num = parseInt(summaryMatch[1], 10);
+        if (num > count) count = num; // Use summary if it's higher
+      }
+    });
+    return count;
+  }, [logLines]);
 
   // ---------- Tests registry ----------
   const TESTS_BY_SITE: Record<string, TestDef[]> = {
@@ -157,6 +194,16 @@ function SiteTestCard({ site }: { site: Site }) {
     });
     return grouped;
   }, [tests]);
+
+  // ---------- Auto-detect category when test changes ----------
+  useEffect(() => {
+    if (selectedTest && selectedTest !== "all") {
+      const test = tests.find((t) => t.path === selectedTest);
+      if (test?.category) {
+        setSelectedCategory(test.category);
+      }
+    }
+  }, [selectedTest, tests]);
 
   // ---------- Reset selection if the current value becomes invalid ----------
   useEffect(() => {
@@ -248,6 +295,102 @@ function SiteTestCard({ site }: { site: Site }) {
       }, 500);
     } catch (err) {
       console.error("Error running test:", err);
+      Swal.fire({ icon: "error", title: "Oops...", text: "An unexpected error occurred while running the tests." });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const runCategoryTests = async () => {
+    // Guard category selection
+    if (!selectedCategory) {
+      Swal.fire({
+        icon: "warning",
+        title: "No category selected",
+        text: "Please select a test to identify its category first.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    const categoryTests = testsByCategory.get(selectedCategory);
+    if (!categoryTests || categoryTests.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "No tests in category",
+        text: "The selected category has no tests.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    // Show confirmation with test count
+    const result = await Swal.fire({
+      icon: "question",
+      title: "Run all tests in category?",
+      html: `
+        <div class="text-left space-y-2">
+          <p><strong>Category:</strong> ${selectedCategory}</p>
+          <p><strong>Tests to run:</strong> ${categoryTests.length}</p>
+          <div class="mt-3 p-3 bg-gray-100 rounded text-sm max-h-48 overflow-y-auto">
+            <ul class="list-disc list-inside">
+              ${categoryTests.map(t => `<li>${t.label}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `,
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Run tests",
+      cancelButtonText: "Cancel",
+    });
+
+    if (!result.isConfirmed) return;
+
+    setIsLoading(true);
+    setLogLines([]);
+
+    try {
+      // Run all tests in the category by passing all paths
+      const testPaths = categoryTests.map(t => t.path).join(" ");
+
+      const res = await fetch("/api/run-test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          testPath: testPaths,
+          project: site.project,
+        }),
+      });
+
+      if (!res.body) {
+        setIsLoading(false);
+        Swal.fire({ icon: "error", title: "Error", text: "No response received from the server." });
+        return;
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value);
+        const lines = chunk.split("\n").filter((line) => line.trim() !== "");
+        setLogLines((prev) => [...prev, ...lines]);
+      }
+
+      setActiveLogTab("summary");
+      setLogOpen(true);
+
+      setTimeout(() => {
+        window.open("/reports/index.html", "_blank");
+      }, 500);
+    } catch (err) {
+      console.error("Error running category tests:", err);
       Swal.fire({ icon: "error", title: "Oops...", text: "An unexpected error occurred while running the tests." });
     } finally {
       setIsLoading(false);
@@ -365,6 +508,20 @@ function SiteTestCard({ site }: { site: Site }) {
                 )}
               </SelectContent>
             </Select>
+
+            {/* Category indicator */}
+            {selectedCategory && selectedTest !== "all" && (
+              <div className="mt-3 flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-lg border border-emerald-500/30">
+                <span className="text-emerald-400 text-sm">📂</span>
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-emerald-400/60 uppercase tracking-wider">Selected Category</span>
+                  <span className="text-emerald-300 font-medium text-sm">{selectedCategory}</span>
+                </div>
+                <div className="ml-auto text-emerald-400/60 text-xs">
+                  {testsByCategory.get(selectedCategory)?.length || 0} tests
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="space-y-3">
@@ -405,23 +562,46 @@ function SiteTestCard({ site }: { site: Site }) {
         <div className="flex flex-wrap items-center gap-4 pt-2">
           <Button
             onClick={() => runTest()}
-            disabled={isLoading}
+            disabled={isLoading || !selectedTest}
             className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-6 rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            title={selectedTest === "all" ? "Run all tests in the project" : selectedTest ? "Run the selected test only" : "Select a test first"}
           >
             {isLoading ? (
               <>
                 <Loader size={18} />
-                <span className="ml-2">Running Tests...</span>
+                <span className="ml-2">Running...</span>
               </>
             ) : (
               <>
                 <span className="mr-2">▶️</span>
-                Run Test
+                {selectedTest === "all" ? "Run All Tests" : "Run Single Test"}
               </>
             )}
           </Button>
 
-          <Link href={`/api/download-report?project=${site.project}`} target="_blank">
+          <Button
+            onClick={runCategoryTests}
+            disabled={isLoading || !selectedCategory || selectedTest === "all"}
+            className="bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-semibold px-8 py-6 rounded-xl shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            title={selectedCategory && selectedTest !== "all" ? `Run all ${testsByCategory.get(selectedCategory)?.length || 0} tests in: ${selectedCategory}` : "Select a test to enable category run"}
+          >
+            {isLoading ? (
+              <>
+                <Loader size={18} />
+                <span className="ml-2">Running Category...</span>
+              </>
+            ) : (
+              <>
+                <span className="mr-2">📂</span>
+                Run Category {selectedCategory && `(${testsByCategory.get(selectedCategory)?.length || 0})`}
+              </>
+            )}
+          </Button>
+
+          <Link
+            href={`/api/download-report?project=${site.project}&category=${encodeURIComponent(selectedCategory || '')}&test=${encodeURIComponent(selectedTest || '')}`}
+            target="_blank"
+          >
             <Button className="bg-white/5 hover:bg-white/10 text-white border border-white/20 hover:border-white/30 font-medium px-6 py-6 rounded-xl transition-all hover:scale-105">
               <span className="mr-2">📥</span> Export PDF
             </Button>
@@ -543,9 +723,14 @@ function LogLine({ line }: { line: string }) {
   const isIndented = line.startsWith("  ");
   const isError = line.includes("Error:");
 
+  // Detect friendly explanation messages
+  const isExplanation = line.trim().startsWith("✓ This");
+
   const color =
     isError
       ? "text-rose-300"
+      : isExplanation
+      ? "text-blue-300"
       : isPassed
       ? "text-emerald-300"
       : isFailed
@@ -553,6 +738,18 @@ function LogLine({ line }: { line: string }) {
       : isTestTitle
       ? "text-cyan-200"
       : "text-white/80";
+
+  // Special styling for explanations
+  if (isExplanation) {
+    return (
+      <div className="flex items-start gap-2 my-1 pl-6">
+        <span className="text-blue-400 text-sm">💡</span>
+        <span className="text-blue-300/90 text-sm italic bg-blue-500/5 px-3 py-1 rounded-md border border-blue-500/20">
+          {line.trim().replace(/^✓\s*/, "")}
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className={`flex items-start gap-2 ${color}`}>

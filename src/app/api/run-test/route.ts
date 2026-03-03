@@ -5,11 +5,23 @@ import path from "path";
 import * as cheerio from "cheerio";
 import { createTestRun } from "@/lib/db";
 
-const PROJECT_FAVICONS: Record<string, string> = {
-  pip: "https://partnerinpublishing.com/wp-content/uploads/2024/05/cropped-Group-3.png",
-  gradepotential: "https://gradepotentialtutoring.ue1.rapydapps.cloud/favicon.ico",
-  itopia: "https://itopia.com/favicon.ico",
-  metricmarine: "https://www.metricmarine.com/favicon.ico",
+const PROJECT_CONFIGS: Record<string, { favicon: string; title: string }> = {
+  pip: {
+    favicon: "https://partnerinpublishing.com/wp-content/uploads/2024/05/cropped-Group-3.png",
+    title: "Partner in Publishing - Test Report"
+  },
+  gradepotential: {
+    favicon: "https://gradepotentialtutoring.ue1.rapydapps.cloud/favicon.ico",
+    title: "Grade Potential - Test Report"
+  },
+  itopia: {
+    favicon: "https://itopia.com/favicon.ico",
+    title: "Itopia - Test Report"
+  },
+  metricmarine: {
+    favicon: "https://www.metricmarine.com/favicon.ico",
+    title: "Metric Marine - Test Report"
+  },
 };
 
 export async function POST(req: Request) {
@@ -42,6 +54,78 @@ export async function POST(req: Request) {
       const stripAnsi = (str: string) =>
         str.replace(/\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])/g, "");
 
+      // Helper to add friendly explanations after passed tests
+      const addTestExplanation = (testName: string) => {
+        const explanations: Record<string, string> = {
+          // Forms
+          "contact form": "This confirms your contact form is visible and functional for visitors.",
+          "form validation": "This ensures required fields are properly validated before submission.",
+          "form fields": "This verifies all form input fields are working correctly.",
+          "hubspot": "This confirms your HubSpot integration is working correctly.",
+          "captcha": "This validates form protection and spam prevention are active.",
+
+          // Navigation
+          "mobile menu": "This confirms mobile users can navigate your site easily.",
+          "mobile navigation": "This ensures navigation works smoothly on mobile devices.",
+          "menu links": "This verifies all navigation links work without errors.",
+          "footer": "This confirms footer links and information display correctly.",
+          "submenu": "This ensures dropdown menus expand and function properly.",
+
+          // Hero & CTA
+          "hero section": "This confirms your homepage hero section loads properly with all content.",
+          "hero background": "This verifies hero background images load correctly.",
+          "hero cta": "This ensures call-to-action buttons are visible and clickable.",
+          "cta": "This confirms CTA buttons are working and properly linked.",
+          "carousel": "This verifies animated carousels work smoothly without layout issues.",
+          "animation": "This confirms page animations perform smoothly.",
+
+          // Analytics & Tracking
+          "analytics tracking": "This confirms analytics scripts (GTM, Clarity) are properly installed.",
+          "google tag manager": "This verifies GTM is loading and tracking events correctly.",
+          "gtm": "This ensures Google Tag Manager is configured properly.",
+          "clarity": "This confirms Microsoft Clarity is capturing visitor behavior data.",
+          "tracking": "This verifies tracking systems are functioning correctly.",
+
+          // SEO
+          "seo metadata": "This ensures meta tags are optimized for search engines.",
+          "meta tags": "This confirms essential meta tags are present and correct.",
+          "open graph": "This verifies social media sharing will display correctly.",
+          "structured data": "This confirms schema markup is properly implemented.",
+          "canonical": "This ensures canonical URLs are set correctly to avoid duplicate content.",
+
+          // About Page
+          "team members": "This verifies team member profiles display with photos and information.",
+          "team": "This confirms team section displays correctly with all member details.",
+          "leadership": "This ensures leadership information is organized and accessible.",
+          "video": "This confirms embedded videos load and are playable.",
+          "bio": "This verifies biography links and information are accessible.",
+
+          // Common Elements
+          "cookie": "This confirms cookie consent banner displays and functions properly.",
+          "popup": "This verifies popups and modals display without interfering with content.",
+          "modal": "This ensures modal windows open and close correctly.",
+
+          // Performance & Quality
+          "load": "This confirms your page loads within acceptable timeframes.",
+          "performance": "This verifies the page performs well under standard conditions.",
+          "accessibility": "This ensures your site is accessible to all users including those with disabilities.",
+          "responsive": "This confirms your site adapts properly to different screen sizes.",
+
+          // Content
+          "images": "This verifies images load correctly without broken links.",
+          "links": "This ensures all hyperlinks are valid and working.",
+          "content": "This confirms page content displays as expected.",
+        };
+
+        const lowerName = testName.toLowerCase();
+        for (const [key, message] of Object.entries(explanations)) {
+          if (lowerName.includes(key)) {
+            return `✓ ${message}`;
+          }
+        }
+        return "✓ This test passed successfully, confirming this feature works as expected.";
+      };
+
       const stdoutDone = new Promise<void>((resolve) => {
         child.stdout.on("data", (data) => {
           const lines = data.toString().split("\n");
@@ -50,6 +134,16 @@ export async function POST(req: Request) {
             if (clean) {
               safeEnqueue(clean);
               allLines.push(clean);
+
+              // Detect passed tests and add friendly explanation
+              // Pattern: "✓ test name" or "[X/Y] › test name"
+              const passMatch = clean.match(/✓\s+(.+?)(?:\s+\(|\s*$)/);
+              if (passMatch) {
+                const testName = passMatch[1].trim();
+                const explanation = addTestExplanation(testName);
+                safeEnqueue(`  ${explanation}`);
+                allLines.push(`  ${explanation}`);
+              }
             }
           }
         });
@@ -88,19 +182,39 @@ export async function POST(req: Request) {
         try {
           let html = await fs.readFile(indexFile, "utf8");
 
-          html = html.replace(/<title>.*<\/title>/, `<title>${project.toUpperCase()} Test Report</title>`);
+          // Get project configuration
+          const config = PROJECT_CONFIGS[project] || {
+            favicon: "/default-favicon.ico",
+            title: `${project.toUpperCase()} - Test Report`
+          };
 
-          const faviconUrl = PROJECT_FAVICONS[project] || "/default-favicon.ico";
-          const faviconTag = `<link rel="icon" href="${faviconUrl}?v=${Date.now()}">`;
+          // Update title
+          html = html.replace(/<title>.*<\/title>/, `<title>${config.title}</title>`);
+
+          // Download and save favicon locally
+          const faviconPath = path.join(projectDir, "favicon.png");
+          try {
+            const faviconResponse = await fetch(config.favicon);
+            if (faviconResponse.ok) {
+              const buffer = Buffer.from(await faviconResponse.arrayBuffer());
+              await fs.writeFile(faviconPath, buffer);
+              console.log(`✅ Favicon downloaded for ${project}`);
+            }
+          } catch (faviconErr) {
+            console.warn(`⚠️  Could not download favicon: ${faviconErr}`);
+          }
+
+          // Update favicon link to use local file
+          const faviconTag = `<link rel="icon" href="./favicon.png?v=${Date.now()}" type="image/png">`;
 
           if (html.includes('<link rel="icon"')) {
-            html = html.replace(/<link rel="icon".*?>/, faviconTag);
+            html = html.replace(/<link rel="icon".*?>/g, faviconTag);
           } else {
             html = html.replace("</head>", `${faviconTag}\n</head>`);
           }
 
           await fs.writeFile(indexFile, html, "utf8");
-          console.log(`✅ Título y favicon editados en ${indexFile}`);
+          console.log(`✅ Título y favicon editados en ${indexFile}: ${config.title}`);
         } catch (err) {
           console.error("❌ Error modificando título/favicon:", err);
         }
