@@ -733,14 +733,13 @@ DEBUG="prisma:*" npm run dev
 5. Lint pase: `npm run lint`
 6. PR a `master` con descripción detallada
 
-## Licencia
+---
+## ✍️ Author
 
-Proyecto privado - Dev Team PIP
-
-## Contacto
-
-Dev Team PIP
-
+- Created by **Carlos Garzón**  
+- Software Engineer, Fullstack Developer.
 ---
 
-**v2.0.0** • All systems operational
+## Licenses 
+
+MIT
