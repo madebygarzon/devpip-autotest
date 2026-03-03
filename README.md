@@ -1,85 +1,85 @@
 # DevPiP AutoTest Suite
 
-Plataforma de testing automatizado E2E con dashboard web moderno para ejecutar, monitorear y analizar tests de Playwright en múltiples proyectos.
+E2E automated testing platform with modern web dashboard to execute, monitor, and analyze Playwright tests across multiple projects.
 
-## Stack Tecnológico
+## Technology Stack
 
 ### Frontend & Framework
-- **Next.js 15.4.2** - React framework con App Router y Turbopack
-- **React 19.1.0** - Biblioteca UI con RSC (React Server Components)
-- **TypeScript 5** - Tipado estático
-- **Tailwind CSS 4** - Framework CSS utilitario con PostCSS
-- **Radix UI** - Componentes accesibles headless:
+- **Next.js 15.4.2** - React framework with App Router and Turbopack
+- **React 19.1.0** - UI library with RSC (React Server Components)
+- **TypeScript 5** - Static typing
+- **Tailwind CSS 4** - Utility-first CSS framework with PostCSS
+- **Radix UI** - Accessible headless components:
   - Dialog, Dropdown Menu, Select, Tabs, Tooltip
   - Collapsible, Label, Separator, Slot
-- **Lucide React** - Sistema de iconos
-- **class-variance-authority** + **clsx** + **tailwind-merge** - Gestión de clases
-- **Recharts 3.1** - Visualización de datos y gráficos
+- **Lucide React** - Icon system
+- **class-variance-authority** + **clsx** + **tailwind-merge** - Class management
+- **Recharts 3.1** - Data visualization and charts
 
 ### Testing
-- **Playwright 1.54** - Framework E2E testing
-  - Configuración multi-proyecto (pip, gradepotential, itopia, metricmarine)
-  - Screenshots y videos en fallos (`only-on-failure`)
-  - Traces para debugging (`retain-on-failure`)
-  - Reportes HTML interactivos
-  - Headless mode por defecto
+- **Playwright 1.54** - E2E testing framework
+  - Multi-project configuration (pip, gradepotential, itopia, metricmarine)
+  - Screenshots and videos on failure (`only-on-failure`)
+  - Traces for debugging (`retain-on-failure`)
+  - Interactive HTML reports
+  - Headless mode by default
 
-### Base de Datos & ORM
-- **PostgreSQL** - Base de datos relacional
-- **Prisma 7.2.0** - ORM TypeScript-first
-  - `@prisma/client` - Cliente generado
-  - `@prisma/extension-accelerate` - Connection pooling y caching
-  - Schema con modelos para:
-    - Proyectos y ejecuciones de tests
+### Database & ORM
+- **PostgreSQL** - Relational database
+- **Prisma 7.2.0** - TypeScript-first ORM
+  - `@prisma/client` - Generated client
+  - `@prisma/extension-accelerate` - Connection pooling and caching
+  - Schema with models for:
+    - Projects and test runs
     - Media (screenshots, videos)
-    - Errores de tests
+    - Test errors
     - Microsoft Clarity analytics
 
 ### State Management & Data Fetching
-- **SWR 2.3** - React Hooks para fetching y caching de datos
-  - Revalidación automática
-  - Caché optimista
+- **SWR 2.3** - React Hooks for data fetching and caching
+  - Automatic revalidation
+  - Optimistic cache
   - Real-time updates
 
-### Integraciones Externas
-- **Microsoft Clarity API** - Analytics y session replay
-  - Métricas de engagement
+### External Integrations
+- **Microsoft Clarity API** - Analytics and session replay
+  - Engagement metrics
   - Device/Browser/OS breakdown
-  - Geolocalización
+  - Geolocation
   - Traffic sources
-- **DeepSeek AI** - Chat asistente para análisis de errores
-- **HubSpot** - Validación de formularios
+- **DeepSeek AI** - Chat assistant for error analysis
+- **HubSpot** - Form validation
 
-### Utilidades
-- **Cheerio 1.1** - jQuery para Node.js (parsing HTML)
-- **Fuse.js 7.0** - Búsqueda fuzzy
-- **PapaParse 5.5** - Parser CSV
-- **SweetAlert2 11.22** - Modales y alertas elegantes
-- **dotenv 17.2** - Variables de entorno
+### Utilities
+- **Cheerio 1.1** - jQuery for Node.js (HTML parsing)
+- **Fuse.js 7.0** - Fuzzy search
+- **PapaParse 5.5** - CSV parser
+- **SweetAlert2 11.22** - Elegant modals and alerts
+- **dotenv 17.2** - Environment variables
 
 ### Dev Dependencies
 - **ESLint 9** + **eslint-config-next**
-- **tsx 4.21** - TypeScript executor para scripts
-- **tw-animate-css** - Animaciones Tailwind
+- **tsx 4.21** - TypeScript executor for scripts
+- **tw-animate-css** - Tailwind animations
 
-## Arquitectura del Sistema
+## System Architecture
 
 ```
 devpip-autotest/
 ├── src/
 │   ├── app/                           # Next.js App Router
 │   │   ├── api/                       # API Routes
-│   │   │   ├── run-test/route.ts      # POST: Ejecuta tests vía spawn
-│   │   │   ├── download-report/route.ts # GET: Descarga ZIP de reportes
-│   │   │   ├── deepseek/route.ts      # POST: Chat AI
+│   │   │   ├── run-test/route.ts      # POST: Execute tests via spawn
+│   │   │   ├── download-report/route.ts # GET: Download ZIP reports
+│   │   │   ├── deepseek/route.ts      # POST: AI Chat
 │   │   │   └── clarity/               # Clarity API endpoints
 │   │   │       ├── metrics/route.ts
 │   │   │       ├── devices/route.ts
 │   │   │       ├── countries/route.ts
 │   │   │       └── sources/route.ts
-│   │   ├── page.tsx                   # Dashboard principal (Client Component)
+│   │   ├── page.tsx                   # Main dashboard (Client Component)
 │   │   ├── layout.tsx                 # Root layout
-│   │   └── globals.css                # Estilos globales Tailwind
+│   │   └── globals.css                # Tailwind global styles
 │   ├── components/
 │   │   ├── ui/                        # Radix UI wrappers
 │   │   │   ├── sidebar.tsx
@@ -92,14 +92,14 @@ devpip-autotest/
 │   │   │   ├── ClarityCountriesChart.tsx
 │   │   │   └── ClarityTrafficSources.tsx
 │   │   ├── TestContent.tsx            # Test runner UI
-│   │   ├── TestHistory.tsx            # Historial con filtros y búsqueda
+│   │   ├── TestHistory.tsx            # History with filters and search
 │   │   ├── ClarityDashboardContent.tsx
-│   │   └── AIChat.tsx                 # Chat DeepSeek
+│   │   └── AIChat.tsx                 # DeepSeek chat
 │   ├── lib/
-│   │   └── db.ts                      # Prisma client + queries helpers
+│   │   └── db.ts                      # Prisma client + query helpers
 │   └── generated/
-│       └── prisma/                    # Cliente Prisma generado
-├── tests/                             # Tests Playwright organizados por proyecto
+│       └── prisma/                    # Generated Prisma client
+├── tests/                             # Playwright tests organized by project
 │   ├── pip/
 │   │   ├── home/                      # Form, hero, menu, carousel, etc.
 │   │   ├── about/                     # Team, videos, leadership
@@ -111,76 +111,76 @@ devpip-autotest/
 │   └── metricmarine/
 ├── prisma/
 │   ├── schema.prisma                  # Database schema
-│   └── migrations/                    # Migrations SQL
+│   └── migrations/                    # SQL migrations
 ├── public/
-│   └── reports/                       # Reportes HTML servidos estáticamente
+│   └── reports/                       # HTML reports served statically
 │       ├── pip/
 │       ├── gradepotential/
 │       ├── itopia/
 │       └── metricmarine/
-├── playwright-report/                 # Reporte local generado
-├── test-results/                      # Screenshots/videos de fallos
-├── playwright.config.ts               # Configuración Playwright
-├── tailwind.config.ts                 # Configuración Tailwind
+├── playwright-report/                 # Local generated report
+├── test-results/                      # Screenshots/videos from failures
+├── playwright.config.ts               # Playwright configuration
+├── tailwind.config.ts                 # Tailwind configuration
 └── tsconfig.json                      # TypeScript config
 ```
 
-## Características Principales
+## Main Features
 
-### 1. Test Runner con Streaming
-- Ejecución de tests individuales o suites completas
-- Streaming en tiempo real del output vía `ReadableStream`
-- Spawn de proceso Node (`npx playwright test`)
-- Parsing de output con detección de ANSI codes
-- Explicaciones amigables post-test automáticas
-- Generación de reportes HTML con favicon customizado
+### 1. Test Runner with Streaming
+- Execution of individual tests or complete suites
+- Real-time output streaming via `ReadableStream`
+- Node process spawn (`npx playwright test`)
+- Output parsing with ANSI code detection
+- Automatic friendly post-test explanations
+- HTML report generation with custom favicon
 
 **Flow:**
 ```
-Cliente → POST /api/run-test → spawn playwright → stream output →
+Client → POST /api/run-test → spawn playwright → stream output →
 copy report → extract media → save to DB → response close
 ```
 
-### 2. Persistencia de Historial
-- Todos los test runs se guardan en PostgreSQL
-- Relaciones Prisma:
+### 2. History Persistence
+- All test runs saved to PostgreSQL
+- Prisma relationships:
   ```prisma
   Project 1—n TestRun 1—n (TestMedia | TestError)
   ```
-- Queries optimizadas con indexes en `projectId`, `createdAt`, `testPath`
-- Legacy ID support para compatibilidad con sistema anterior
-- Cascade delete para limpieza automática
+- Optimized queries with indexes on `projectId`, `createdAt`, `testPath`
+- Legacy ID support for backward compatibility
+- Cascade delete for automatic cleanup
 
-### 3. Dashboard de Clarity Analytics
-- Snapshots diarios de métricas agregadas
-- Breakdown dimensional:
-  - Dispositivos (Desktop, Mobile, Tablet)
-  - Navegadores (Chrome, Firefox, Safari, etc.)
+### 3. Clarity Analytics Dashboard
+- Daily snapshots of aggregated metrics
+- Dimensional breakdown:
+  - Devices (Desktop, Mobile, Tablet)
+  - Browsers (Chrome, Firefox, Safari, etc.)
   - Operating Systems (Windows, macOS, iOS, Android)
-  - Países (códigos ISO)
-  - Traffic sources y channels
-  - Top páginas y referrers
-- Métricas de UX:
+  - Countries (ISO codes)
+  - Traffic sources and channels
+  - Top pages and referrers
+- UX Metrics:
   - Rage clicks, dead clicks, quick backs
   - Scroll depth, engagement time
   - Script errors, error clicks
-- Estrategias de API configurables: `minimal`, `balanced`, `full`
+- Configurable API strategies: `minimal`, `balanced`, `full`
 
-### 4. Chat AI Contextual
-- Integración con DeepSeek API
-- Contexto automático de errores de tests
-- Modal flotante con animaciones
+### 4. Contextual AI Chat
+- DeepSeek API integration
+- Automatic context from test errors
+- Floating modal with animations
 - Markdown rendering
-- Auto-truncate de prompts largos (4000 chars)
+- Auto-truncate for long prompts (4000 chars)
 
-## Configuración
+## Configuration
 
-### Requisitos
+### Requirements
 - Node.js 20+
 - PostgreSQL 14+
 - npm/pnpm/yarn
 
-### Variables de Entorno
+### Environment Variables
 
 ```bash
 # .env
@@ -189,7 +189,7 @@ DEEPSEEK_API_KEY=your_api_key
 # Database - Direct connection
 DATABASE_URL="postgresql://user:password@host:5432/dbname?sslmode=require"
 
-# Prisma Accelerate (opcional, para mejor performance)
+# Prisma Accelerate (optional, for better performance)
 PRISMA_DATABASE_URL="prisma+postgresql://accelerate.prisma-data.net/?api_key=xxx"
 
 # Compatibility
@@ -204,90 +204,90 @@ CLARITY_API_STRATEGY=minimal
 NEXT_PUBLIC_CLARITY_API_STRATEGY=minimal
 ```
 
-### Instalación
+### Installation
 
 ```bash
-# 1. Instalar dependencias
+# 1. Install dependencies
 npm install
 
-# 2. Generar Prisma Client
+# 2. Generate Prisma Client
 npx prisma generate
 
-# 3. Ejecutar migraciones
+# 3. Run migrations
 npx prisma migrate dev --name init
 
-# 4. (Opcional) Seed inicial
+# 4. (Optional) Initial seed
 npx tsx scripts/seed.ts
 
-# 5. Instalar navegadores de Playwright
+# 5. Install Playwright browsers
 npx playwright install
 ```
 
 ### Scripts
 
 ```bash
-npm run dev        # Next.js dev con Turbopack (puerto 3000)
-npm run build      # Build producción
-npm run start      # Servidor producción
+npm run dev        # Next.js dev with Turbopack (port 3000)
+npm run build      # Production build
+npm run start      # Production server
 npm run lint       # ESLint
-npm run test       # Ejecutar tests Playwright
+npm run test       # Run Playwright tests
 ```
 
-## Uso
+## Usage
 
-### 1. Ejecutar Tests desde UI
+### 1. Run Tests from UI
 
 ```
 http://localhost:3000
 ```
 
-1. Selecciona proyecto (pip, gradepotential, itopia, metricmarine)
-2. Opcionalmente especifica test path (ej: `tests/pip/home/form.spec.ts`)
+1. Select project (pip, gradepotential, itopia, metricmarine)
+2. Optionally specify test path (e.g., `tests/pip/home/form.spec.ts`)
 3. Click "Run Tests"
-4. Visualiza output en tiempo real
-5. Click "View Report" para ver HTML detallado
+4. View output in real-time
+5. Click "View Report" to see detailed HTML
 
-### 2. Ejecutar Tests desde CLI
+### 2. Run Tests from CLI
 
 ```bash
-# Todos los tests de un proyecto
+# All tests for a project
 npx playwright test --project pip
 
-# Test específico
+# Specific test
 npx playwright test tests/pip/home/form.spec.ts --project pip
 
-# Con headed mode (ver navegador)
+# With headed mode (show browser)
 npx playwright test --headed --project pip
 
-# Debug mode con inspector
+# Debug mode with inspector
 npx playwright test --debug tests/pip/home/form.spec.ts
 
-# UI mode interactivo
+# Interactive UI mode
 npx playwright test --ui
 ```
 
-### 3. Acceso a Reportes
+### 3. Access Reports
 
 - **Local:** `playwright-report/index.html`
-- **Web:** `http://localhost:3000/reports/{proyecto}/index.html`
-- **Descarga:** API endpoint `/api/download-report?testRunId=xxx`
+- **Web:** `http://localhost:3000/reports/{project}/index.html`
+- **Download:** API endpoint `/api/download-report?testRunId=xxx`
 
-### 4. Dashboard de Clarity
+### 4. Clarity Dashboard
 
-Navega a la sección "Clarity Dashboard" para ver:
-- Métricas agregadas (sesiones, usuarios, engagement)
-- Gráficos de dispositivos y navegadores
-- Mapa de países
-- Fuentes de tráfico
-- Top páginas
+Navigate to the "Clarity Dashboard" section to view:
+- Aggregated metrics (sessions, users, engagement)
+- Device and browser charts
+- Country map
+- Traffic sources
+- Top pages
 
-## Flujo de Ejecución
+## Execution Flow
 
 ### Test Run Flow
 
 ```mermaid
 sequenceDiagram
-    participant U as Usuario
+    participant U as User
     participant F as Frontend
     participant API as /api/run-test
     participant PW as Playwright
@@ -313,7 +313,7 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant U as Usuario
+    participant U as User
     participant F as Frontend (SWR)
     participant API as /api/clarity
     participant C as Clarity API
@@ -338,36 +338,36 @@ sequenceDiagram
 
 ### `POST /api/run-test`
 
-Ejecuta tests de Playwright con streaming en tiempo real.
+Execute Playwright tests with real-time streaming.
 
 **Request:**
 ```json
 {
-  "testPath": "tests/pip/home/form.spec.ts",  // Opcional: "" = todos los tests
-  "project": "pip"                            // Requerido
+  "testPath": "tests/pip/home/form.spec.ts",  // Optional: "" = all tests
+  "project": "pip"                            // Required
 }
 ```
 
-**Response:** `text/plain; charset=utf-8` con streaming
+**Response:** `text/plain; charset=utf-8` with streaming
 
-**Proceso:**
+**Process:**
 1. Spawn `npx playwright test {args}`
-2. Stream stdout/stderr con ANSI strip
-3. Generar reporte HTML
-4. Copiar a `public/reports/{project}/`
-5. Customizar title y favicon
-6. Extraer media (screenshots, videos) a `assets/`
-7. Parse resultados (passed, failed, errors)
-8. Guardar en DB
+2. Stream stdout/stderr with ANSI strip
+3. Generate HTML report
+4. Copy to `public/reports/{project}/`
+5. Customize title and favicon
+6. Extract media (screenshots, videos) to `assets/`
+7. Parse results (passed, failed, errors)
+8. Save to DB
 9. Close stream
 
 ### `GET /api/download-report?testRunId={id}`
 
-Descarga reporte como ZIP.
+Download report as ZIP.
 
 ### `POST /api/deepseek`
 
-Chat AI.
+AI Chat.
 
 **Request:**
 ```json
@@ -391,7 +391,7 @@ Chat AI.
 
 ### `GET /api/clarity/metrics`
 
-Métricas agregadas de Clarity.
+Clarity aggregated metrics.
 
 **Response:**
 ```json
@@ -408,7 +408,7 @@ Métricas agregadas de Clarity.
 
 ### `GET /api/clarity/devices`
 
-Breakdown por dispositivo.
+Device breakdown.
 
 **Response:**
 ```json
@@ -419,7 +419,7 @@ Breakdown por dispositivo.
 ]
 ```
 
-## Modelo de Datos
+## Data Model
 
 ### Core Models
 
@@ -504,12 +504,12 @@ model ClarityDevice {
   @@unique([snapshotId, deviceType])
 }
 
-// ... similar para Browser, OS, Country, Source, Channel, Page, Referrer
+// ... similar for Browser, OS, Country, Source, Channel, Page, Referrer
 ```
 
-## Estructura de Tests
+## Test Structure
 
-Los tests siguen el patrón **AAA** (Arrange, Act, Assert):
+Tests follow the **AAA** pattern (Arrange, Act, Assert):
 
 ```typescript
 import { test, expect } from "@playwright/test";
@@ -538,22 +538,22 @@ test("Contact form fields are functional", async ({ page }) => {
 });
 ```
 
-### Categorías de Tests
+### Test Categories
 
 ```
 tests/
 ├── pip/
 │   ├── home/
-│   │   ├── form.spec.ts                    # Formulario contacto
-│   │   ├── form-validation.spec.ts          # Validaciones
-│   │   ├── form-validation-hubspot.spec.ts  # Integración HubSpot
-│   │   ├── hero-section.spec.ts             # Hero y CTAs
-│   │   ├── carousel-animation.spec.ts       # Animaciones
-│   │   ├── menu-links.spec.ts               # Navegación
+│   │   ├── form.spec.ts                    # Contact form
+│   │   ├── form-validation.spec.ts          # Validations
+│   │   ├── form-validation-hubspot.spec.ts  # HubSpot integration
+│   │   ├── hero-section.spec.ts             # Hero and CTAs
+│   │   ├── carousel-animation.spec.ts       # Animations
+│   │   ├── menu-links.spec.ts               # Navigation
 │   │   ├── menu-links-footer.spec.ts        # Footer
-│   │   ├── mobile-menu.spec.ts              # Menú móvil
-│   │   ├── home-cards-navigation.spec.ts    # Tarjetas
-│   │   ├── home-anchor.spec.ts              # Anclas
+│   │   ├── mobile-menu.spec.ts              # Mobile menu
+│   │   ├── home-cards-navigation.spec.ts    # Cards
+│   │   ├── home-anchor.spec.ts              # Anchors
 │   │   ├── accessibility.spec.ts            # WCAG
 │   │   └── performance.spec.ts              # Core Web Vitals
 │   ├── about/
@@ -614,25 +614,25 @@ export default defineConfig({
 ## Performance Optimization
 
 ### Frontend
-- **SWR** para caching agresivo de test history y Clarity data
-- **Next.js Image** para optimización de imágenes
-- **Turbopack** para dev builds ultra-rápidos
-- **React Server Components** para reducir bundle size
-- **Code splitting** automático por Next.js
+- **SWR** for aggressive caching of test history and Clarity data
+- **Next.js Image** for image optimization
+- **Turbopack** for ultra-fast dev builds
+- **React Server Components** to reduce bundle size
+- **Code splitting** automatic via Next.js
 
 ### Database
-- **Prisma Accelerate** para connection pooling global
-- **Indexes** estratégicos en queries frecuentes
-- **Cascade delete** para evitar orphaned records
-- **Unique constraints** para prevenir duplicados
+- **Prisma Accelerate** for global connection pooling
+- **Strategic indexes** on frequent queries
+- **Cascade delete** to avoid orphaned records
+- **Unique constraints** to prevent duplicates
 
 ### Playwright
-- **Headless mode** por defecto
-- **Screenshot/video** solo en fallos
-- **Trace** solo en fallos
-- **Parallel execution** (configurable en `playwright.config.ts`)
+- **Headless mode** by default
+- **Screenshot/video** only on failures
+- **Trace** only on failures
+- **Parallel execution** (configurable in `playwright.config.ts`)
 
-## Producción
+## Production
 
 ### Build & Deploy
 
@@ -640,70 +640,70 @@ export default defineConfig({
 # Build Next.js
 npm run build
 
-# Variables de entorno requeridas en producción
+# Required environment variables in production
 DATABASE_URL
-PRISMA_DATABASE_URL  # Recomendado para Accelerate
+PRISMA_DATABASE_URL  # Recommended for Accelerate
 DEEPSEEK_API_KEY
 CLARITY_PROJECT_ID
 CLARITY_TOKEN
 CLARITY_API_STRATEGY
 
-# Start servidor
+# Start server
 npm run start
 ```
 
 ### Considerations
 
-- **Auth:** Agregar middleware de autenticación en production
-- **HTTPS:** Proxy reverso (nginx, Cloudflare)
-- **CORS:** Configurar para tu dominio
-- **Rate Limiting:** API routes de Clarity y DeepSeek
-- **Database:** Conexión SSL requerida, connection pooling
-- **Monitoring:** Logs de errores, APM (Sentry, Datadog)
-- **Backups:** PostgreSQL automático
+- **Auth:** Add authentication middleware in production
+- **HTTPS:** Reverse proxy (nginx, Cloudflare)
+- **CORS:** Configure for your domain
+- **Rate Limiting:** Clarity and DeepSeek API routes
+- **Database:** SSL connection required, connection pooling
+- **Monitoring:** Error logs, APM (Sentry, Datadog)
+- **Backups:** Automatic PostgreSQL backups
 
-## Desarrollo
+## Development
 
-### Agregar Nuevo Proyecto
+### Adding a New Project
 
-1. **Configurar Playwright:**
+1. **Configure Playwright:**
 ```typescript
 // playwright.config.ts
 projects: [
   {
-    name: 'mi-proyecto',
-    use: { baseURL: 'https://mi-sitio.com' },
+    name: 'my-project',
+    use: { baseURL: 'https://my-site.com' },
   },
 ]
 ```
 
-2. **Crear tests:**
+2. **Create tests:**
 ```bash
-mkdir tests/mi-proyecto
-mkdir tests/mi-proyecto/home
-touch tests/mi-proyecto/home/form.spec.ts
+mkdir tests/my-project
+mkdir tests/my-project/home
+touch tests/my-project/home/form.spec.ts
 ```
 
-3. **Agregar a UI:**
+3. **Add to UI:**
 ```typescript
 // src/app/api/run-test/route.ts
 const PROJECT_CONFIGS: Record<string, { favicon: string; title: string }> = {
-  'mi-proyecto': {
-    favicon: 'https://mi-sitio.com/favicon.ico',
-    title: 'Mi Proyecto - Test Report'
+  'my-project': {
+    favicon: 'https://my-site.com/favicon.ico',
+    title: 'My Project - Test Report'
   },
   // ...
 };
 ```
 
-4. **Seed en DB:**
+4. **Seed in DB:**
 ```typescript
-// Script Prisma
+// Prisma script
 await prisma.project.create({
   data: {
-    name: 'mi-proyecto',
-    url: 'https://mi-sitio.com',
-    description: 'Descripción',
+    name: 'my-project',
+    url: 'https://my-site.com',
+    description: 'Description',
   },
 });
 ```
@@ -711,35 +711,35 @@ await prisma.project.create({
 ### Debugging
 
 ```bash
-# Ver traces de test fallido
+# View traces from failed test
 npx playwright show-trace test-results/.../trace.zip
 
-# Modo debug con inspector
+# Debug mode with inspector
 npx playwright test --debug tests/pip/home/form.spec.ts
 
-# Modo UI interactivo
+# Interactive UI mode
 npx playwright test --ui
 
-# Ver logs Prisma
+# View Prisma logs
 DEBUG="prisma:*" npm run dev
 ```
 
-## Contribuciones
+## Contributing
 
-1. Fork del repo
-2. Branch desde `master`: `git checkout -b feature/nueva-funcionalidad`
-3. Commits descriptivos siguiendo convención
-4. Tests pasen: `npm run test`
-5. Lint pase: `npm run lint`
-6. PR a `master` con descripción detallada
+1. Fork the repo
+2. Branch from `master`: `git checkout -b feature/new-feature`
+3. Descriptive commits following convention
+4. Tests must pass: `npm run test`
+5. Lint must pass: `npm run lint`
+6. PR to `master` with detailed description
 
 ---
 ## ✍️ Author
 
-- Created by **Carlos Garzón**  
+- Created by **Carlos Garzón**
 - Software Engineer, Fullstack Developer.
 ---
 
-## Licenses 
+## Licenses
 
 MIT
