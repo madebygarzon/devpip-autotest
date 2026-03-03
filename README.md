@@ -734,7 +734,7 @@ DEBUG="prisma:*" npm run dev
 6. PR to `master` with detailed description
 
 ---
-## ✍️ Author
+## Author
 
 - Created by **Carlos Garzón**
 - Software Engineer, Fullstack Developer.
